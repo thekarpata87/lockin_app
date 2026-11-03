@@ -14,8 +14,7 @@ import { unlockAudio } from '../../lib/audio'
 import { addDays, dayKeyOf, weekStartOf } from '../../lib/dates'
 import { startTimer } from '../../lib/timer'
 import { cRuleWarning } from '../../lib/cardio'
-import { setRun, useRun } from './run'
-import { TimerView } from './TimerView'
+import { setRun } from './run'
 import styles from './Casa.module.css'
 
 type HomeKind = Exclude<CardioKind, 'post'>
@@ -29,7 +28,6 @@ const KIND_LABEL: Record<CardioKind, string> = { post: 'Post-gym', A: 'A', B: 'B
 
 export function Casa() {
   const { date } = useClock()
-  const run = useRun()
   const dayKey = dayKeyOf(date)
   const suggested = HOME_CARDIO_WEEK[dayKey]
   const [kind, setKind] = useState<HomeKind>((suggested.main ?? 'A') as HomeKind)
@@ -125,7 +123,6 @@ export function Casa() {
         </section>
       ) : null}
 
-      {run ? <TimerView run={run} /> : null}
     </>
   )
 }

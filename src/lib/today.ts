@@ -11,7 +11,10 @@ export function mealRecipeId(log: DailyLog | undefined, plan: WeekPlan | undefin
   return plan?.days[dayKey]?.[meal] ?? null
 }
 
-export const HABIT_LABELS: Record<keyof Habits, string> = {
+/** Habits shown as checklist rows (thaw has its own reminder). */
+export type HabitKey = Exclude<keyof Habits, 'thaw'>
+
+export const HABIT_LABELS: Record<HabitKey, string> = {
   pre: 'Pre-entreno y creatina',
   gym: 'Gym',
   gymCardio: 'Cardio post-gym',
@@ -20,7 +23,7 @@ export const HABIT_LABELS: Record<keyof Habits, string> = {
 }
 
 /** Saturday has no gym; Sunday is rest. */
-export function habitsFor(dayKey: DayKey): (keyof Habits)[] {
+export function habitsFor(dayKey: DayKey): HabitKey[] {
   if (dayKey === 'dom') return ['pre', 'sleepOnTime']
   if (dayKey === 'sab') return ['pre', 'homeCardio', 'sleepOnTime']
   return ['pre', 'gym', 'gymCardio', 'homeCardio', 'sleepOnTime']

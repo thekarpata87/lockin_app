@@ -18,7 +18,7 @@ type Props = { open: boolean; onClose: () => void; session: WorkoutSession; sets
 
 export function FinishSheet({ open, onClose, session, sets, date }: Props) {
   const toast = useToast()
-  const [cardio, setCardio] = useState(true)
+  const [cardio, setCardio] = useState(false)
   const [minutes, setMinutes] = useState(20)
   const s = sessionSummary(sets, session.startedAt, Date.now())
 
@@ -48,7 +48,7 @@ export function FinishSheet({ open, onClose, session, sets, date }: Props) {
         <Stat value={String(s.series)} label="series" />
         <Stat value={s.volumeKg.toLocaleString('es-MX')} label="kg de volumen" />
       </div>
-      <ChecklistRow label="Cardio post-gym hecho" detail="20–25 min en zona 2" checked={cardio} onChange={setCardio} />
+      <ChecklistRow label="Ya hice el cardio post-gym" detail="Si aún no, inícialo con temporizador al terminar" checked={cardio} onChange={setCardio} />
       {cardio ? <Stepper label="Minutos de cardio" value={minutes} onChange={setMinutes} step={1} min={1} max={90} decimals={0} unit="min" inputMode="numeric" /> : null}
       <div className={styles.sheetPad}>
         <Button block onClick={() => void finish()}>

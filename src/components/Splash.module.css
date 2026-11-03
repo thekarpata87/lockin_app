@@ -1,0 +1,99 @@
+/* Always the dark brand look, like the icon and the iOS launch image. */
+.splash {
+  position: fixed;
+  inset: 0;
+  z-index: 900;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #0d0d0c;
+  background-image: linear-gradient(to right, #2c2c2a 1px, transparent 1px);
+  background-size: 25% 100%;
+  color: #ededea;
+  cursor: pointer;
+}
+
+.center {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+  /* Keep the typed word visually centered once complete (7 letters + cursor). */
+  width: 8ch;
+  font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 44px;
+  font-weight: 700;
+}
+
+.line {
+  display: flex;
+  align-items: center;
+  height: 1.2em;
+}
+
+.typed,
+.byTyped {
+  display: inline-block;
+  overflow: hidden;
+  white-space: nowrap;
+  width: 0;
+}
+
+.cursor {
+  display: inline-block;
+  width: 1ch;
+  height: 0.95em;
+  background: #ff6a14;
+  transform: translateY(-70vh);
+}
+
+.byline {
+  font-size: 13px;
+  font-weight: 400;
+  color: #8c8c87;
+  height: 1.4em;
+}
+
+/* 1. drop 0–420 ms · 2. type 520–1220 · 3. blink 1250–1850 · byline 1300–1800 · 4. slide away 2100–2450 */
+.go .cursor {
+  animation:
+    s-drop 420ms cubic-bezier(0.22, 1, 0.36, 1) forwards,
+    s-blink 600ms steps(1) 1250ms 2 both;
+}
+
+.go .typed {
+  animation: s-type 700ms steps(7) 520ms forwards;
+}
+
+.go .byTyped {
+  animation: s-type-by 500ms steps(15) 1300ms forwards;
+}
+
+.go {
+  animation: s-out 350ms cubic-bezier(0.55, 0, 0.75, 0.2) 2100ms forwards;
+}
+
+@keyframes s-drop {
+  to { transform: translateY(0); }
+}
+@keyframes s-type {
+  to { width: 7ch; }
+}
+@keyframes s-type-by {
+  to { width: 15ch; }
+}
+@keyframes s-blink {
+  50% { opacity: 0; }
+}
+@keyframes s-out {
+  to { transform: translateY(-100%); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cursor { transform: none; }
+  .typed { width: 7ch; }
+  .byTyped { width: 15ch; }
+  .go .cursor, .go .typed, .go .byTyped { animation: none; }
+  .go { animation: s-fade 200ms ease 500ms forwards; }
+  @keyframes s-fade { to { opacity: 0; } }
+}

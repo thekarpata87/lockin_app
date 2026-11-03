@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest'
 import type { BodyMetric, DailyLog, SetLog, WorkoutSession } from '../db/schema'
 import { fillMeal } from './blocks'
 import { addDays } from './dates'
-import { avg7, compliance, records, stats, suggestions, weeklyTable, weighIns } from './progress'
+import { avg7, compliance, records, stats, suggestions, weekGrid, weeklyTable, weighIns } from './progress'
 
 const sync = { updatedAt: 1, deleted: 0 as const, dirty: 0 as const }
 const m = (date: string, weightKg: number): BodyMetric => ({ date, weightKg, ...sync })
@@ -129,5 +129,18 @@ describe('suggestions (CONTENT §11)', () => {
     const sess = (date: string, min: number): WorkoutSession => ({ id: date, date, dayKey: 'lun', startedAt: 0, endedAt: min * 60_000, ...sync })
     expect(ids({ ...base, weighIns: weighIns(fourWeeks()), sessions: [sess('2026-11-02', 85), sess('2026-10-30', 90)] })).toContain('longSessions')
     expect(ids({ ...base, weighIns: weighIns(fourWeeks()), sessions: [sess('2026-11-02', 85), sess('2026-10-20', 90)] })).not.toContain('longSessions')
+  })
+})
+
+describe('weekGrid', () => {
+  it('summarizes each day of the week', () => {
+    const logs = [log('2026-11-04', { meals: { comida: { filled: fillMeal('comida') }, cena: { filled: { P: 1 } } }, waterMl: 2500, habits: { pre: true, gym: false, gymCardio: false, homeCardio: false, sleepOnTime: true } })]
+    const sessions: WorkoutSession[] = [{ id: 's', date: '2026-11-04', dayKey: 'mie', startedAt: 0, endedAt: 1, ...sync }]
+    const cardio = [{ id: 'c', date: '2026-11-04', kind: 'post' as const, minutes: 20, completed: true, ...sync }]
+    const g = weekGrid('2026-11-02', '2026-11-04', logs, sessions, cardio)
+    expect(g).toHaveLength(7)
+    expect(g[2]).toMatchObject({ date: '2026-11-04', waterMl: 2500, gym: true, postCardio: true, homeCardio: false, sleepOnTime: true, future: false })
+    expect(g[2]!.meals).toEqual({ pre: false, desayuno: false, colacion: false, comida: true, cena: false })
+    expect(g[3]!.future).toBe(true)
   })
 })

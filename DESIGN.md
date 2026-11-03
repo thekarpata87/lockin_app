@@ -274,6 +274,7 @@ El movimiento sigue la idea de bloques: los bloques **se recorren** y **se llena
 | Franjas naranjas (comida hecha, paso hecho, receta en la semana) | Crecen de abajo hacia arriba. |
 | Temporizador de casa | Sube a pantalla completa; cada fase nueva entra subiendo 16 px. |
 | Ejercicio nuevo en el gym | Entra subiendo 12 px (`anim-rise`). |
+| Splash al abrir (≈2.4 s, se salta con un toque) | Fondo oscuro con retícula. El cuadro naranja cae desde arriba, se vuelve el cursor de bloque de una terminal y avanza a la derecha escribiendo `LOCK_IN` (JetBrains Mono 700) letra por letra; parpadea dos veces, se escribe `by thekarpata87` en pequeño y la pantalla sube para revelar la app. La imagen de arranque de iOS es el primer cuadro (fondo y retícula). |
 
 - **Un solo momento orquestado:** cuando se completan todos los bloques del día, la fila protagonista de HOY se invierte a naranja durante 400 ms y queda con la franja naranja.
 - Las animaciones no corren al abrir la app, solo cuando algo cambia.

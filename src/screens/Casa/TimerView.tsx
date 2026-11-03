@@ -6,6 +6,7 @@ import { useToast } from '../../components/Toast'
 import { CARDIO_BY_ID } from '../../data/cardio'
 import { saveCardioSession } from '../../db/repo/cardio'
 import { setHabit } from '../../db/repo/dailyLogs'
+import { sessionsOn, updateSession } from '../../db/repo/workouts'
 import { changeBeep, tickBeep } from '../../lib/audio'
 import {
   buildPhases,
@@ -66,7 +67,12 @@ export function TimerView({ run }: { run: Run }) {
     const minutes = realMinutes(phases, run.state, t)
     if (minutes >= 1) {
       await saveCardioSession({ date: run.date, kind: run.kind, minutes, completed })
-      if (completed || minutes >= HABIT_MIN) await setHabit(run.date, 'homeCardio', true)
+      if (completed || minutes >= HABIT_MIN) await setHabit(run.date, run.kind === 'post' ? 'gymCardio' : 'homeCardio', true)
+      if (run.kind === 'post') {
+        // Attach the minutes to today's last finished gym session.
+        const last = (await sessionsOn(run.date)).filter((x) => x.endedAt).sort((a, b) => (b.endedAt ?? 0) - (a.endedAt ?? 0))[0]
+        if (last) await updateSession(last.id, { cardioMin: minutes })
+      }
       toast(`Cardio guardado: ${minutes} min`)
     }
     setRun(null)
@@ -94,7 +100,7 @@ export function TimerView({ run }: { run: Run }) {
   return createPortal(
     <div className={`${styles.timer} ${isWork ? styles.work : ''} ${v.paused ? styles.paused : ''}`} role="timer" aria-live="off">
       <div className={styles.timerTop}>
-        <span className={`display ${styles.timerName}`}>{session.id === 'B' ? 'CIRCUITO B' : session.name}</span>
+        <span className={`display ${styles.timerName}`}>{session.id === 'B' ? 'CIRCUITO B' : session.id === 'post' ? 'POST-GYM' : session.name}</span>
         <span className={styles.timerRound}>{p?.round ? `Ronda ${p.round} / ${p.rounds}` : `Quedan ${formatClock(totalLeft)}`}</span>
       </div>
 

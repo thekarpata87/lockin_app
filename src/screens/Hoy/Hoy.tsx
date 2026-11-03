@@ -16,6 +16,7 @@ import { HeroStats } from './HeroStats'
 import { DayBlocks } from './DayBlocks'
 import { isMealDone, Meals, mealSubtitle, toggleMeal } from './Meals'
 import { NowRow } from './NowRow'
+import { Thaw } from './Thaw'
 import { Water } from './Water'
 
 const CELEBRATE_MS = 400
@@ -64,6 +65,7 @@ export function Hoy() {
         mealDone={(m) => isMealDone(log, m)}
         onToggleMeal={(m) => void toggleMeal(date, m, isMealDone(log, m))}
       />
+      <Thaw date={date} time={time} log={log} />
       <DayBlocks meals={log?.meals ?? {}} />
       <Meals date={date} time={time} currentMeal={now?.meal} swaps={plan?.swaps} log={log} recipeFor={recipeFor} plannedFor={plannedFor} />
       <Water date={date} ml={log?.waterMl ?? 0} />

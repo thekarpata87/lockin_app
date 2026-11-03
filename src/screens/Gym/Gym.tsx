@@ -17,7 +17,9 @@ import { holdWakeLock, WAKE_LOCK_HINT, wakeLockSupported } from '../../lib/wakel
 import { ExerciseList } from './ExerciseList'
 import { FinishSheet } from './FinishSheet'
 import { SessionSummary } from './SessionSummary'
+import { PostCardio } from './PostCardio'
 import { SetLogger } from './SetLogger'
+import { StartWeights } from './StartWeights'
 import styles from './Gym.module.css'
 
 const DAY_OPTIONS = GYM_DAYS.map((d) => ({ value: d.key, label: d.dayName.slice(0, 3) }))
@@ -76,6 +78,7 @@ export function Gym() {
 
       <Slide id={`${active?.id ?? 'idle'}:${dayKey}`} pos={GYM_DAYS.findIndex((d) => d.key === dayKey)}>
       {finished && !active ? <SessionSummary session={finished} /> : null}
+      {finished && !active ? <PostCardio date={date} /> : null}
 
       {!active && !isGymDay(todayKey) ? (
         <p className={styles.note}>Hoy no hay gym. Si quieres entrenar, elige el día de la rutina.</p>
@@ -92,6 +95,7 @@ export function Gym() {
           last={lastByExercise.get(current.id) ?? []}
           reduced={reduced}
           restSec={settings.restSec}
+          startWeights={settings.startWeights}
           onDone={() => setSelected(null)}
         />
       ) : null}
@@ -111,6 +115,8 @@ export function Gym() {
         currentId={active ? current?.id : undefined}
         onSelect={active ? setSelected : undefined}
       />
+
+      {!active ? <StartWeights day={day} startWeights={settings.startWeights ?? {}} last={lastByExercise} /> : null}
 
       <div className={styles.actions}>
         {active ? (

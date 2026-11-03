@@ -169,3 +169,76 @@
   font-weight: 500;
   font-variant-numeric: tabular-nums;
 }
+
+/* ---- Week at a glance ---- */
+.grid {
+  background: var(--surface);
+  border-bottom: 1px solid var(--line);
+}
+
+.gridRow {
+  display: grid;
+  grid-template-columns: 52px minmax(62px, 1fr) 36px repeat(4, 32px);
+  align-items: center;
+  gap: 2px;
+  min-height: 40px;
+  padding: 0 var(--s-4);
+  border-bottom: 1px solid var(--line);
+  font-variant-numeric: tabular-nums;
+}
+
+.gridRow:last-child {
+  border-bottom: 0;
+}
+
+.gridHead {
+  min-height: 32px;
+  font-size: var(--t-micro);
+  font-weight: 500;
+  color: var(--ink-muted);
+}
+
+.gridDay {
+  font-size: var(--t-label);
+}
+
+.today .gridDay {
+  font-weight: 700;
+}
+
+.today {
+  box-shadow: inset 4px 0 0 var(--accent);
+}
+
+.future {
+  opacity: 0.45;
+}
+
+.mealCells {
+  display: flex;
+  gap: 2px;
+}
+
+.cell {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border: 1px solid var(--line);
+  background: var(--bg);
+}
+
+.cellOn {
+  background: var(--accent);
+  border-color: var(--accent);
+}
+
+.water {
+  font-size: var(--t-label);
+  text-align: right;
+}
+
+.center {
+  text-align: center;
+  display: flex;
+  justify-content: center;
+}

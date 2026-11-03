@@ -40,17 +40,18 @@ type Props = {
   last: SetLog[]
   reduced: boolean
   restSec: number
+  startWeights?: Record<string, number>
   onDone: () => void
 }
 
 const SIDE_LABEL: Record<Side, string> = { izq: 'Izquierda', der: 'Derecha' }
 const kg = (n?: number) => (n === undefined ? '' : n.toFixed(1))
 
-export function SetLogger({ session, exercise: e, position, count, sets, last, reduced, restSec, onDone }: Props) {
+export function SetLogger({ session, exercise: e, position, count, sets, last, reduced, restSec, startWeights, onDone }: Props) {
   const toast = useToast()
   const rest = useRest()
   const suggestion = progression(e, last, reduced)
-  const init = prefill(e, sets, last, suggestion)
+  const init = prefill(e, sets, last, suggestion, startWeights)
   const [weight, setWeight] = useState(init.weightKg)
   const [reps, setReps] = useState(init.reps)
   const [completed21, setCompleted21] = useState(true)

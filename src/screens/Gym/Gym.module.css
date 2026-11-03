@@ -271,3 +271,62 @@
   gap: var(--s-3);
   align-items: stretch;
 }
+
+.linkRow {
+  width: 100%;
+  min-height: var(--row-min);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s-3);
+  padding: var(--s-3) var(--s-4);
+  background: var(--surface);
+  border-bottom: 1px solid var(--line);
+  text-align: left;
+}
+
+.count {
+  flex: none;
+  font-size: var(--t-label);
+  font-variant-numeric: tabular-nums;
+}
+
+.sheetNote {
+  padding: var(--s-3) var(--s-4);
+  border-bottom: 1px solid var(--line);
+  font-size: var(--t-label);
+  line-height: var(--t-label-lh);
+  color: var(--ink-muted);
+}
+
+.weightRow {
+  min-height: var(--row-min);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s-3);
+  padding: var(--s-2) var(--s-4);
+  border-bottom: 1px solid var(--line);
+}
+
+.weightName {
+  font-size: var(--t-label);
+  line-height: var(--t-label-lh);
+}
+
+.weightInput {
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: var(--s-2);
+}
+
+.weightInput input {
+  width: 7ch;
+  min-height: 44px;
+  border: 1px solid var(--line);
+  background: var(--bg);
+  padding: 0 var(--s-3);
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}

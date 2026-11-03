@@ -2,7 +2,10 @@
 import { EXERCISE_BY_ID } from '../data/routines'
 import { SUGGESTION_THRESHOLDS as T, SUGGESTIONS } from '../data/rules'
 import type { SuggestionId } from '../data/rules'
-import type { BodyMetric, DailyLog, SetLog, WorkoutSession } from '../db/schema'
+import type { BodyMetric, CardioLog, DailyLog, SetLog, WorkoutSession } from '../db/schema'
+import { MEAL_ORDER } from '../data/types'
+import type { MealKey } from '../data/types'
+import { clampFilled, mealProgress } from './blocks'
 import { dayProgress } from './blocks'
 import { addDays, daysBetween, planDay, weekStartOf } from './dates'
 
@@ -172,4 +175,38 @@ export function suggestions(i: SuggestionInput): { id: SuggestionId; message: st
   if (long.length >= T.longSessionsPerWeek) out.push('longSessions')
 
   return out.map((id) => ({ id, message: SUGGESTIONS[id].message }))
+}
+
+// ---- Week at a glance ----
+
+export type DayRow = {
+  date: string
+  meals: Record<MealKey, boolean>
+  waterMl: number
+  gym: boolean
+  postCardio: boolean
+  homeCardio: boolean
+  sleepOnTime: boolean
+  future: boolean
+}
+
+/** One row per day of the week starting at `weekStart`: what got done. */
+export function weekGrid(weekStart: string, today: string, logs: DailyLog[], sessions: WorkoutSession[], cardio: CardioLog[]): DayRow[] {
+  const byDate = new Map(logs.filter((l) => !l.deleted).map((l) => [l.date, l]))
+  return Array.from({ length: 7 }, (_, i) => {
+    const date = addDays(weekStart, i)
+    const log = byDate.get(date)
+    const meals = Object.fromEntries(MEAL_ORDER.map((m) => [m, mealProgress(m, clampFilled(m, log?.meals[m]?.filled ?? {})).complete])) as Record<MealKey, boolean>
+    const dayCardio = cardio.filter((c) => c.date === date && !c.deleted)
+    return {
+      date,
+      meals,
+      waterMl: log?.waterMl ?? 0,
+      gym: !!log?.habits.gym || sessions.some((s) => s.date === date && !s.deleted && !!s.endedAt),
+      postCardio: !!log?.habits.gymCardio || dayCardio.some((c) => c.kind === 'post'),
+      homeCardio: !!log?.habits.homeCardio || dayCardio.some((c) => c.kind !== 'post' && c.completed),
+      sleepOnTime: !!log?.habits.sleepOnTime,
+      future: date > today,
+    }
+  })
 }

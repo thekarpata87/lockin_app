@@ -102,7 +102,13 @@ const latestFirst = (a: SetLog, b: SetLog) => b.updatedAt - a.updatedAt
  * Stepper preload: the latest set of this exercise in the current session; otherwise
  * last time's latest set (weight raised to the suggestion, if any); otherwise defaults.
  */
-export function prefill(e: Exercise, current: SetLog[], last: SetLog[], suggestion: Suggestion | null): { weightKg: number; reps: number } {
+export function prefill(
+  e: Exercise,
+  current: SetLog[],
+  last: SetLog[],
+  suggestion: Suggestion | null,
+  startWeights?: Record<string, number>,
+): { weightKg: number; reps: number } {
   const mine = current.filter((s) => s.exerciseId === e.id && !s.deleted).sort(latestFirst)[0]
   if (mine) return { weightKg: mine.weightKg ?? DEFAULT_KG[e.equipment], reps: mine.reps ?? defaultReps(e) }
   const prev = last.filter((s) => !s.deleted).sort(latestFirst)[0]
@@ -110,8 +116,10 @@ export function prefill(e: Exercise, current: SetLog[], last: SetLog[], suggesti
     const w = suggestion?.kind === 'up' ? suggestion.weightKg : (prev.weightKg ?? DEFAULT_KG[e.equipment])
     return { weightKg: w, reps: prev.reps ?? defaultReps(e) }
   }
-  return { weightKg: DEFAULT_KG[e.equipment], reps: defaultReps(e) }
+  return { weightKg: startWeights?.[e.id] ?? DEFAULT_KG[e.equipment], reps: defaultReps(e) }
 }
+
+export const defaultKg = (e: Exercise) => DEFAULT_KG[e.equipment]
 
 export const weightStep = (e: Exercise) => (e.equipment === 'mancuerna' ? 2 : 2.5)
 

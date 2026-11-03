@@ -4,7 +4,7 @@ import { emptyWeekPlan } from '../db/repo/weeklyPlans'
 import type { WeekPlan } from '../db/schema'
 import { recipeBlocks } from './blocks'
 import { autoPlan, distribute, isInWeek, toggleInWeek, needsFreshWarning, plannedMeals, setDayRecipe, setSwap, swappedName, togglePick, withSwaps } from './plan'
-import { containers, freshMeals, prepSteps } from './prep'
+import { containers, freshMeals, prepSteps, thawTonight } from './prep'
 import { formatGrams, shoppingList } from './shopping'
 
 /** Test week, calculated by hand in the comments below. */
@@ -190,6 +190,13 @@ describe('Sunday prep', () => {
     ])
     expect(c.filter((x) => x.dest === 'Congelador')).toHaveLength(4)
     expect(freshMeals(w).map((f) => f.day)).toEqual(['mar', 'jue', 'sab'])
+  })
+
+  it('thaw reminder: only freezer containers for tomorrow', () => {
+    expect(thawTonight(w, 'jue').map((c) => `${c.meal}:${c.recipeId}`)).toEqual(['comida:com-tacos-bistec'])
+    expect(thawTonight(w, 'vie')).toHaveLength(2)
+    expect(thawTonight(w, 'mar')).toEqual([]) // Tue comes from the fridge
+    expect(thawTonight(undefined, 'jue')).toEqual([])
   })
 
   it('no prep recipes → no guide', () => {

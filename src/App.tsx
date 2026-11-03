@@ -2,9 +2,12 @@ import { lazy, Suspense, useEffect } from 'react'
 import type { ReactNode } from 'react'
 import { HashRouter, Navigate, Route, Routes, useLocation } from 'react-router'
 import { Slide } from './components/Slide'
+import { Splash } from './components/Splash'
 import { useLiveQuery } from 'dexie-react-hooks'
 import { getSettings } from './db/repo/settings'
 import { applyTheme } from './lib/theme'
+import { useRun } from './screens/Casa/run'
+import { TimerView } from './screens/Casa/TimerView'
 import { AppFrame } from './components/AppFrame'
 import { TabBar } from './components/TabBar'
 import { ToastProvider } from './components/Toast'
@@ -28,6 +31,8 @@ export function App() {
           <>
             <UpdateToast />
             <TabBar />
+            <ActiveTimer />
+            <Splash />
           </>
         }
       >
@@ -66,4 +71,10 @@ function TabSlide({ children }: { children: ReactNode }) {
       {children}
     </Slide>
   )
+}
+
+/** The cardio timer covers the app from any tab (home cardio or post-gym). */
+function ActiveTimer() {
+  const run = useRun()
+  return run ? <TimerView run={run} /> : null
 }

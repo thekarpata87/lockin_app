@@ -8,9 +8,10 @@ import { GYM_DAY_BY_KEY } from '../../data/routines'
 import type { GymDayKey } from '../../data/routines'
 import type { DayKey } from '../../data/types'
 import { EMPTY_HABITS, setFlexMeal, setHabit, setSteps } from '../../db/repo/dailyLogs'
-import type { DailyLog, Habits as HabitsT } from '../../db/schema'
+import type { DailyLog } from '../../db/schema'
 import { fromISODate } from '../../lib/dates'
 import { HABIT_LABELS, habitsFor } from '../../lib/today'
+import type { HabitKey } from '../../lib/today'
 import { shortTime } from './format'
 import styles from './Hoy.module.css'
 
@@ -28,13 +29,13 @@ const fmtSteps = (n: number) => n.toLocaleString('es-MX')
 export function Habits({ date, dayKey, log, sleepTime, creatineG, flexOtherDay }: Props) {
   const habits = { ...EMPTY_HABITS, ...log?.habits }
   const cardio = HOME_CARDIO_WEEK[dayKey]
-  const detail: Partial<Record<keyof HabitsT, string>> = {
+  const detail: Partial<Record<HabitKey, string>> = {
     pre: `Creatina ${creatineG} g`,
     gym: GYM_DAY_BY_KEY.get(dayKey as GymDayKey)?.title.toLowerCase().replace(/^./, (c) => c.toUpperCase()),
     gymCardio: '20–25 min en zona 2',
     homeCardio: cardio.main ? `${CARDIO_BY_ID.get(cardio.main)?.name}${cardio.alt ? ` (o ${cardio.alt})` : ''}` : undefined,
   }
-  const label = (h: keyof HabitsT) => (h === 'sleepOnTime' ? `Dormir a las ${shortTime(sleepTime)}` : HABIT_LABELS[h])
+  const label = (h: HabitKey) => (h === 'sleepOnTime' ? `Dormir a las ${shortTime(sleepTime)}` : HABIT_LABELS[h])
 
   return (
     <section aria-label="Hábitos">

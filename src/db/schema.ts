@@ -29,6 +29,8 @@ export type SettingsData = {
   reducedVolume: boolean
   creatineG: number
   theme: Theme
+  /** Working weight per exercise before there is any history (kg). */
+  startWeights?: Record<string, number>
 }
 
 export type SettingsRow = SyncFields & { id: 'me'; data: SettingsData }
@@ -38,7 +40,15 @@ export type BodyMetric = SyncFields & { date: string; weightKg?: number; waistCm
 /** recipeId: undefined = follow the weekly plan; null = "Armar con bloques" for that day. */
 export type MealLog = { recipeId?: string | null; filled: Blocks }
 
-export type Habits = { pre: boolean; gym: boolean; gymCardio: boolean; homeCardio: boolean; sleepOnTime: boolean }
+export type Habits = {
+  pre: boolean
+  gym: boolean
+  gymCardio: boolean
+  homeCardio: boolean
+  sleepOnTime: boolean
+  /** Moved tomorrow's container from the freezer to the fridge. */
+  thaw?: boolean
+}
 
 export type DailyLog = SyncFields & {
   date: string

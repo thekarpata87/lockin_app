@@ -82,6 +82,9 @@ describe('prefill', () => {
     expect(prefill(e, [], last, null)).toEqual({ weightKg: 60, reps: 12 })
     expect(prefill(e, [], last, { kind: 'up', weightKg: 62.5 })).toEqual({ weightKg: 62.5, reps: 12 })
     expect(prefill(e, [], [], null)).toEqual({ weightKg: 20, reps: 10 })
+    // starting weights apply only without history
+    expect(prefill(e, [], [], null, { 'press-banca': 55 })).toEqual({ weightKg: 55, reps: 10 })
+    expect(prefill(e, [], last, null, { 'press-banca': 55 })).toEqual({ weightKg: 60, reps: 12 })
   })
 })
 

@@ -19,6 +19,7 @@ import { useClock } from '../../hooks/useClock'
 import { addDays, fromISODate } from '../../lib/dates'
 import { avgSeries, compliance, records, stats, suggestions, weeklyTable, weighIns } from '../../lib/progress'
 import { WeightForm } from '../Hoy/HeroStats'
+import { WeekGrid } from './WeekGrid'
 import styles from './Progreso.module.css'
 
 type Range = 28 | 84 | 0
@@ -117,6 +118,8 @@ export function Progreso() {
           <p className={styles.note}>Solo son sugerencias; la app no cambia tu plan.</p>
         </section>
       ) : null}
+
+      <WeekGrid date={date} />
 
       <div className={styles.sectionHead}>
         <SectionLabel>Cumplimiento</SectionLabel>

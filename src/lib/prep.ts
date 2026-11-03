@@ -46,3 +46,9 @@ export function freshMeals(plan: WeekPlan): FreshMeal[] {
 
 /** "0:05" from minutes. */
 export const fmtOffset = (min: number) => `${Math.floor(min / 60)}:${String(min % 60).padStart(2, '0')}`
+
+/** Tonight: containers for tomorrow that are in the freezer and should move to the fridge. */
+export function thawTonight(planForTomorrow: WeekPlan | undefined, tomorrow: DayKey): Container[] {
+  if (!planForTomorrow) return []
+  return containers(planForTomorrow).filter((c) => c.day === tomorrow && c.dest === 'Congelador')
+}
