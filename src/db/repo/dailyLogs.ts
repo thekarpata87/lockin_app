@@ -25,8 +25,8 @@ export function updateDailyLog(date: string, mutate: (cur: DailyLog) => DailyLog
 export const setMealFilled = (date: string, meal: MealKey, filled: Blocks) =>
   updateDailyLog(date, (cur) => ({ ...cur, meals: { ...cur.meals, [meal]: { ...cur.meals[meal], filled } } }))
 
-/** Per-day recipe override; undefined goes back to the weekly plan. */
-export const setMealRecipe = (date: string, meal: MealKey, recipeId: string | undefined) =>
+/** Per-day recipe override; null = build with blocks, undefined = back to the weekly plan. */
+export const setMealRecipe = (date: string, meal: MealKey, recipeId: string | null | undefined) =>
   updateDailyLog(date, (cur) => ({
     ...cur,
     meals: { ...cur.meals, [meal]: { filled: cur.meals[meal]?.filled ?? {}, recipeId } },

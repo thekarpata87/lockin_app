@@ -1,0 +1,20 @@
+.region {
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: calc(var(--tabbar-h) + env(safe-area-inset-bottom) + var(--s-2));
+  width: calc(min(100%, var(--frame-max) + 2 * var(--frame-gutter)) - 4 * var(--frame-gutter));
+  z-index: 45;
+  pointer-events: none;
+}
+
+.toast {
+  min-height: var(--row-min);
+  display: flex;
+  align-items: center;
+  padding: var(--s-3) var(--s-4);
+  background: var(--inverse);
+  color: var(--on-inverse);
+  font-size: var(--t-label);
+  line-height: var(--t-label-lh);
+}

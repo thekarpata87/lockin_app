@@ -19,3 +19,9 @@ export async function listBodyMetrics(from: string, to: string): Promise<BodyMet
 }
 
 export const deleteBodyMetric = (date: string) => softDelete(db.bodyMetrics, date)
+
+/** Most recent weigh-in, for preloading the stepper. */
+export async function latestBodyMetric(): Promise<BodyMetric | undefined> {
+  const rows = await db.bodyMetrics.orderBy('date').reverse().filter((r) => !r.deleted && r.weightKg !== undefined).limit(1).toArray()
+  return rows[0]
+}

@@ -1,0 +1,63 @@
+.stepper {
+  display: grid;
+  grid-template-columns: 1fr 2fr 1fr;
+  min-height: var(--stepper-h);
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  background: var(--surface);
+}
+
+.btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--ink);
+  -webkit-touch-callout: none;
+  user-select: none;
+}
+
+.btn:active {
+  background: var(--inverse);
+  color: var(--on-inverse);
+}
+
+.value {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: var(--s-2);
+  border-left: 1px solid var(--line);
+  border-right: 1px solid var(--line);
+  padding: 0 var(--s-2);
+  align-self: stretch;
+  align-content: center;
+  flex-wrap: wrap;
+}
+
+.input {
+  width: 4.2ch;
+  min-width: 0;
+  border: 0;
+  background: transparent;
+  text-align: right;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: var(--t-number);
+  line-height: var(--t-number-lh);
+  font-variant-numeric: tabular-nums;
+  padding: var(--s-4) 0;
+}
+
+.input:focus {
+  outline: none;
+}
+
+.value:focus-within {
+  outline: var(--bracket-stroke) solid var(--accent);
+  outline-offset: -2px;
+}
+
+.unit {
+  font-size: var(--t-label);
+  color: var(--ink-muted);
+}

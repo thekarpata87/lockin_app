@@ -35,7 +35,8 @@ export type SettingsRow = SyncFields & { id: 'me'; data: SettingsData }
 
 export type BodyMetric = SyncFields & { date: string; weightKg?: number; waistCm?: number; note?: string }
 
-export type MealLog = { recipeId?: string; filled: Blocks }
+/** recipeId: undefined = follow the weekly plan; null = "Armar con bloques" for that day. */
+export type MealLog = { recipeId?: string | null; filled: Blocks }
 
 export type Habits = { pre: boolean; gym: boolean; gymCardio: boolean; homeCardio: boolean; sleepOnTime: boolean }
 

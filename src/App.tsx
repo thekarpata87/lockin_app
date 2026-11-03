@@ -1,6 +1,7 @@
 import { HashRouter, Navigate, Route, Routes } from 'react-router'
 import { AppFrame } from './components/AppFrame'
 import { TabBar } from './components/TabBar'
+import { ToastProvider } from './components/Toast'
 import { UpdateToast } from './components/UpdateToast'
 import { Hoy } from './screens/Hoy/Hoy'
 import { Placeholder } from './screens/Placeholder'
@@ -8,6 +9,7 @@ import { Placeholder } from './screens/Placeholder'
 export function App() {
   return (
     <HashRouter>
+      <ToastProvider>
       <AppFrame
         footer={
           <>
@@ -25,6 +27,7 @@ export function App() {
           <Route path="*" element={<Navigate to="/hoy" replace />} />
         </Routes>
       </AppFrame>
+      </ToastProvider>
     </HashRouter>
   )
 }

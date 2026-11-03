@@ -1,19 +1,73 @@
-.stats {
+/* ---- Hero (protagonist block) ---- */
+.hero {
+  position: relative;
   display: grid;
   grid-template-columns: 1fr 1fr;
   border-bottom: 1px solid var(--line);
+  background: var(--surface);
+  transition: background-color var(--dur) var(--ease), color var(--dur) var(--ease);
 }
 
+.hero::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  background: transparent;
+  z-index: 1;
+}
+
+.heroDone::before {
+  background: var(--accent);
+}
+
+.celebrate {
+  background: var(--accent);
+  color: var(--on-accent);
+}
+
+.celebrate .label,
+.celebrate .plus {
+  color: var(--on-accent);
+}
+
+.mk {
+  position: absolute;
+  width: var(--marker);
+  height: var(--marker);
+  background: var(--accent);
+  z-index: 2;
+}
+.mkTl { top: -1px; left: -1px; }
+.mkTr { top: -1px; right: -1px; }
+.mkBl { bottom: -1px; left: -1px; }
+.mkBr { bottom: -1px; right: -1px; }
+
 .stat {
-  background: var(--surface);
+  position: relative;
   padding: var(--s-3) var(--s-4) var(--s-4);
   display: flex;
   flex-direction: column;
   gap: var(--s-1);
+  text-align: left;
+  min-height: 96px;
 }
 
 .stat + .stat {
   border-left: 1px solid var(--line);
+}
+
+.weightBtn {
+  width: 100%;
+}
+
+.plus {
+  position: absolute;
+  top: var(--s-3);
+  right: var(--s-3);
+  color: var(--ink-muted);
 }
 
 .number {
@@ -22,33 +76,283 @@
   font-size: var(--t-number);
   line-height: var(--t-number-lh);
   letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
 }
 
-.label,
-.muted {
+.label {
   font-size: var(--t-label);
   line-height: var(--t-label-lh);
   color: var(--ink-muted);
 }
 
-.row {
+/* ---- Ahora ---- */
+.now {
+  display: grid;
+  grid-template-columns: 3fr 1fr;
   background: var(--surface);
   border-bottom: 1px solid var(--line);
+}
+
+.nowText {
   padding: var(--s-4);
   display: flex;
   flex-direction: column;
-  gap: var(--s-3);
+  gap: var(--s-2);
+  min-width: 0;
 }
 
-.list {
+.nowTitle {
+  font-size: var(--t-title);
+  line-height: var(--t-title-lh);
+  font-weight: 500;
+}
+
+.nowTime {
+  font-variant-numeric: tabular-nums;
+}
+
+.nowDetail {
+  font-size: var(--t-label);
+  line-height: var(--t-label-lh);
+  color: var(--ink-muted);
+}
+
+.nowArrow {
+  border-left: 1px solid var(--line);
+}
+
+/* ---- Sections ---- */
+.sectionHead {
+  background: var(--surface);
+  border-bottom: 1px solid var(--line);
+  padding: var(--s-4) var(--s-4) var(--s-3);
+}
+
+.block {
+  background: var(--surface);
+  border-bottom: 1px solid var(--line);
+}
+
+.blockHead {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--s-4) var(--s-4) var(--s-2);
+}
+
+.figure {
+  font-size: var(--t-label);
+  font-variant-numeric: tabular-nums;
+}
+
+.blockActions {
+  padding: var(--s-2) var(--s-4) var(--s-4);
+  display: flex;
+  justify-content: flex-end;
+}
+
+/* ---- Water ---- */
+.water {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  padding: 0 var(--s-2);
+}
+
+.waterHit {
+  height: var(--row-min);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.waterCell {
+  position: relative;
+  width: min(22px, 100%);
+  aspect-ratio: 1;
+  border: 1px solid var(--line);
+  background: var(--bg);
+  overflow: hidden;
+}
+
+.waterCell::after {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  background: var(--accent);
+  transform: scaleY(0);
+  transform-origin: bottom;
+  transition: transform var(--dur-fill) var(--ease);
+}
+
+.waterOn {
+  border-color: var(--accent);
+}
+
+.waterOn::after {
+  transform: scaleY(1);
+}
+
+/* ---- Steps ---- */
+.stepsRow {
+  min-height: var(--row-min);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s-3);
+  padding: var(--s-2) var(--s-4);
+  background: var(--surface);
+  border-bottom: 1px solid var(--line);
+}
+
+.stepsText {
+  display: flex;
+  flex-direction: column;
+}
+
+.stepsInput,
+.input {
+  min-height: 44px;
+  border: 1px solid var(--line);
+  background: var(--bg);
+  padding: 0 var(--s-3);
+  font-size: var(--t-body);
+  font-variant-numeric: tabular-nums;
+}
+
+.stepsInput {
+  width: 9ch;
+  text-align: right;
+}
+
+/* ---- Sheets ---- */
+.form {
+  display: flex;
+  flex-direction: column;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-2);
+  padding: var(--s-4);
+  border-bottom: 1px solid var(--line);
+}
+
+.note {
+  padding: var(--s-4);
+  font-size: var(--t-label);
+  line-height: var(--t-label-lh);
+  color: var(--ink-muted);
+}
+
+.formActions {
+  padding: var(--s-4);
+}
+
+.sheetBody {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-3);
+  padding-top: var(--s-4);
+}
+
+.sheetBody > :not(.formActions):not(.equivGroup) {
+  padding-left: var(--s-4);
+  padding-right: var(--s-4);
+}
+
+.meta {
+  font-size: var(--t-label);
+  color: var(--ink-muted);
+}
+
+.ingredients,
+.steps,
+.equivList {
   margin: 0;
   padding: 0;
   list-style: none;
+  font-size: var(--t-body);
+  line-height: var(--t-body-lh);
+}
+
+.ingredients li,
+.equivList li {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--s-3);
+  padding: var(--s-2) 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.steps {
+  counter-reset: step;
+}
+
+.steps li {
+  counter-increment: step;
+  display: flex;
+  gap: var(--s-3);
+  padding: var(--s-2) 0;
+}
+
+.steps li::before {
+  content: counter(step, decimal-leading-zero);
+  font-size: var(--t-micro);
+  font-weight: 500;
+  color: var(--ink-muted);
+  padding-top: 3px;
+}
+
+.ingBlocks {
+  flex: none;
+  font-size: var(--t-label);
+  color: var(--ink-muted);
+}
+
+.equivGroup {
   display: flex;
   flex-direction: column;
-  gap: var(--s-1);
+  gap: var(--s-2);
+  padding: 0 var(--s-4) var(--s-3);
+}
+
+.equivGroup .note {
+  padding: 0;
+}
+
+.portion {
   font-size: var(--t-label);
   line-height: var(--t-label-lh);
+  color: var(--ink-muted);
+  text-align: right;
+}
+
+.option {
+  width: 100%;
+  min-height: var(--row-min);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s-3);
+  padding: var(--s-2) var(--s-4);
+  border-bottom: 1px solid var(--line);
+  text-align: left;
+}
+
+.optionText {
+  display: flex;
+  flex-direction: column;
+}
+
+.optionText .portion {
+  text-align: left;
+}
+
+.optionMark {
+  flex: none;
+  width: 24px;
+  color: var(--accent);
 }
 
 .version {
