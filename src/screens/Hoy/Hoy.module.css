@@ -40,16 +40,20 @@
   gap: var(--s-3);
 }
 
-.check {
-  font-size: var(--t-number);
-  line-height: 1.05;
-}
-
-.mono {
-  font-weight: 500;
+.list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-1);
+  font-size: var(--t-label);
+  line-height: var(--t-label-lh);
 }
 
 .version {
+  background: var(--surface);
+  border-bottom: 1px solid var(--line);
   padding: var(--s-3) var(--s-4);
   font-size: var(--t-micro);
   line-height: var(--t-micro-lh);

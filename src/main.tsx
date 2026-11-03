@@ -11,9 +11,14 @@ import './styles/tokens.css'
 import './styles/base.css'
 
 import { App } from './App'
+import { ensureStartDate } from './db/repo/settings'
+import { today } from './lib/dates'
 
 // Ask iOS not to evict IndexedDB (SPEC §5.5).
 void navigator.storage?.persist?.().catch(() => undefined)
+
+// First launch sets the plan start date ("Día 1").
+void ensureStartDate(today()).catch((e: unknown) => console.error(e))
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
