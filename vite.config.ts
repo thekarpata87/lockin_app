@@ -18,8 +18,8 @@ export default defineConfig({
       registerType: 'prompt',
       injectRegister: false,
       manifest: {
-        name: 'BLOQUE',
-        short_name: 'BLOQUE',
+        name: 'LOCK_IN',
+        short_name: 'LOCK_IN',
         description: 'Plan de pérdida de grasa: bloques, gym, cardio y progreso.',
         lang: 'es-MX',
         display: 'standalone',

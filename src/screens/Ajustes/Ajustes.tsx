@@ -90,7 +90,7 @@ export function Ajustes() {
       <Head>Datos</Head>
       <DeleteAll />
 
-      <p className={styles.version}>BLOQUE · Versión {__APP_VERSION__}</p>
+      <p className={styles.version}>LOCK_IN · Versión {__APP_VERSION__}</p>
     </>
   )
 }

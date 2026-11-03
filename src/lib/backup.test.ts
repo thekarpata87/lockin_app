@@ -46,13 +46,13 @@ describe('backup', () => {
 
   it('rejects files that are not BLOQUE backups', () => {
     expect(() => parseBackup('no json')).toThrow(BackupError)
-    expect(() => parseBackup('{"app":"otra"}')).toThrow('no es un respaldo de BLOQUE')
+    expect(() => parseBackup('{"app":"otra"}')).toThrow('no es un respaldo de LOCK_IN')
     expect(() => parseBackup('{"app":"bloque","version":9,"tables":{}}')).toThrow('más nueva')
     expect(() => parseBackup('{"app":"bloque","version":1,"tables":{"setLogs":{}}}')).toThrow('formato inesperado')
   })
 
   it('file name and 30-day reminder', () => {
-    expect(backupFileName(new Date(2026, 10, 4))).toBe('bloque-respaldo-2026-11-04.json')
+    expect(backupFileName(new Date(2026, 10, 4))).toBe('lockin-respaldo-2026-11-04.json')
     const day = 86_400_000
     const now = 100 * day
     expect(needsBackupReminder(now - 10 * day, null, now)).toBe(false)

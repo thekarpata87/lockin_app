@@ -161,14 +161,15 @@
   justify-content: flex-end;
 }
 
-/* ---- Water ---- */
+/* ---- Water: one tight row of 12 ---- */
 .water {
-  display: grid;
-  grid-template-columns: repeat(6, 1fr);
-  padding: 0 var(--s-2) var(--s-1);
+  display: flex;
+  gap: 2px;
+  padding: 0 var(--s-4) var(--s-1);
 }
 
 .waterHit {
+  flex: 0 0 25px;
   height: 44px;
   display: flex;
   align-items: center;
@@ -177,7 +178,7 @@
 
 .waterCell {
   position: relative;
-  width: 26px;
+  width: 22px;
   aspect-ratio: 1;
   border: 1px solid var(--line);
   background: var(--bg);

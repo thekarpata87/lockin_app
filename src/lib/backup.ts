@@ -23,7 +23,7 @@ export async function exportBackup(now = new Date()): Promise<Backup> {
 }
 
 export const backupFileName = (now = new Date()) =>
-  `bloque-respaldo-${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}.json`
+  `lockin-respaldo-${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}.json`
 
 export class BackupError extends Error {}
 
@@ -37,7 +37,7 @@ export function parseBackup(text: string): Backup {
   }
   const b = data as Partial<Backup>
   if (!b || b.app !== BACKUP_APP || typeof b.tables !== 'object' || b.tables === null) {
-    throw new BackupError('Este archivo no es un respaldo de BLOQUE.')
+    throw new BackupError('Este archivo no es un respaldo de LOCK_IN.')
   }
   if ((b.version ?? 0) > BACKUP_VERSION) throw new BackupError('El respaldo es de una versión más nueva de la app. Actualiza primero.')
   for (const t of SYNC_TABLES) {
