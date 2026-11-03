@@ -49,7 +49,7 @@ export function HeroStats({ date, planDay, today, latest, celebrating, dayComple
   )
 }
 
-function WeightForm({ date, today, latest, onDone }: { date: string; today?: BodyMetric; latest?: BodyMetric; onDone: () => void }) {
+export function WeightForm({ date, today, latest, onDone }: { date: string; today?: BodyMetric; latest?: BodyMetric; onDone: () => void }) {
   const toast = useToast()
   const [kg, setKg] = useState(today?.weightKg ?? latest?.weightKg ?? PROFILE.startWeightKg)
   const [waist, setWaist] = useState(today?.waistCm !== undefined ? String(today.waistCm) : '')

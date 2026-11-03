@@ -59,3 +59,15 @@ export async function lastSetsForExercise(exerciseId: string, excludeSessionId?:
   const all = await db.setLogs.where('sessionId').equals(recent.sessionId).toArray()
   return all.filter((s) => !s.deleted && s.exerciseId === exerciseId).sort(bySetOrder)
 }
+
+export async function listSessions(from: string, to: string): Promise<WorkoutSession[]> {
+  return (await db.workoutSessions.where('date').between(from, to, true, true).toArray()).filter((s) => !s.deleted)
+}
+
+/** Every non-deleted set of these exercises (for records). */
+export async function setsForExercises(exerciseIds: readonly string[]): Promise<SetLog[]> {
+  const rows = await Promise.all(
+    exerciseIds.map((id) => db.setLogs.where('[exerciseId+updatedAt]').between([id, Dexie.minKey], [id, Dexie.maxKey]).toArray()),
+  )
+  return rows.flat().filter((s) => !s.deleted)
+}

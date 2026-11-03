@@ -7,7 +7,7 @@ import { Casa } from './screens/Casa/Casa'
 import { Comida } from './screens/Comida/Comida'
 import { Gym } from './screens/Gym/Gym'
 import { Hoy } from './screens/Hoy/Hoy'
-import { Placeholder } from './screens/Placeholder'
+import { Progreso } from './screens/Progreso/Progreso'
 
 export function App() {
   return (
@@ -26,7 +26,7 @@ export function App() {
           <Route path="/comida/*" element={<Comida />} />
           <Route path="/gym" element={<Gym />} />
           <Route path="/casa" element={<Casa />} />
-          <Route path="/progreso" element={<Placeholder title="PROGRESO" milestone="M7" />} />
+          <Route path="/progreso" element={<Progreso />} />
           <Route path="*" element={<Navigate to="/hoy" replace />} />
         </Routes>
       </AppFrame>

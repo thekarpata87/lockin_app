@@ -25,3 +25,7 @@ export async function latestBodyMetric(): Promise<BodyMetric | undefined> {
   const rows = await db.bodyMetrics.orderBy('date').reverse().filter((r) => !r.deleted && r.weightKg !== undefined).limit(1).toArray()
   return rows[0]
 }
+
+export async function allBodyMetrics(): Promise<BodyMetric[]> {
+  return (await db.bodyMetrics.orderBy('date').toArray()).filter((r) => !r.deleted)
+}

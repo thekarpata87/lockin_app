@@ -1,0 +1,171 @@
+.sectionHead {
+  background: var(--surface);
+  border-bottom: 1px solid var(--line);
+  padding: var(--s-4) var(--s-4) var(--s-3);
+}
+
+.muted {
+  font-size: var(--t-label);
+  line-height: var(--t-label-lh);
+  color: var(--ink-muted);
+}
+
+.note,
+.empty {
+  background: var(--surface);
+  border-bottom: 1px solid var(--line);
+  padding: var(--s-3) var(--s-4);
+  font-size: var(--t-label);
+  line-height: var(--t-label-lh);
+  color: var(--ink-muted);
+}
+
+.empty {
+  color: var(--ink);
+  font-size: var(--t-body);
+  padding: var(--s-4);
+}
+
+/* ---- Hero: the one bold number of the screen ---- */
+.hero {
+  position: relative;
+  background: var(--surface);
+  border-bottom: 1px solid var(--line);
+  padding: var(--s-6) var(--s-4) var(--s-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-4);
+}
+
+.heroNumber {
+  font-size: var(--t-hero);
+  line-height: var(--t-hero-lh);
+  font-variant-numeric: tabular-nums;
+}
+
+.heroFoot {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--s-3);
+}
+
+.mk {
+  position: absolute;
+  width: var(--marker);
+  height: var(--marker);
+  background: var(--accent);
+}
+.mkTl { top: -1px; left: -1px; }
+.mkTr { top: -1px; right: -1px; }
+.mkBl { bottom: -1px; left: -1px; }
+.mkBr { bottom: -1px; right: -1px; }
+
+/* ---- Stat grid 2×2 ---- */
+.statGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1px;
+  background: var(--line);
+  border-bottom: 1px solid var(--line);
+}
+
+.stat {
+  background: var(--surface);
+  padding: var(--s-3) var(--s-4) var(--s-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-1);
+}
+
+.number {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: var(--t-number);
+  line-height: var(--t-number-lh);
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+}
+
+.legend {
+  display: flex;
+  align-items: center;
+  gap: var(--s-2);
+  flex-wrap: wrap;
+  background: var(--surface);
+  border-bottom: 1px solid var(--line);
+  padding: var(--s-2) var(--s-4) var(--s-3);
+  font-size: var(--t-micro);
+  color: var(--ink-muted);
+}
+
+.legDot {
+  width: 4px;
+  height: 4px;
+  background: var(--ink-muted);
+}
+
+.legLine {
+  width: 16px;
+  height: 2px;
+  background: var(--ink);
+  margin-left: var(--s-2);
+}
+
+.legGoal {
+  width: 16px;
+  border-top: 1.5px dashed var(--accent);
+  margin-left: var(--s-2);
+}
+
+.tip {
+  background: var(--surface);
+  border-bottom: 1px solid var(--line);
+  border-left: 4px solid var(--accent);
+  padding: var(--s-3) var(--s-4);
+  font-size: var(--t-body);
+  line-height: var(--t-body-lh);
+}
+
+.weekRow {
+  display: grid;
+  grid-template-columns: 1fr auto 64px;
+  gap: var(--s-3);
+  align-items: center;
+  min-height: var(--row-min);
+  padding: var(--s-2) var(--s-4);
+  background: var(--surface);
+  border-bottom: 1px solid var(--line);
+  font-variant-numeric: tabular-nums;
+}
+
+.weekName {
+  display: flex;
+  flex-direction: column;
+}
+
+.weekAvg {
+  font-weight: 500;
+}
+
+.weekDiff {
+  text-align: right;
+  color: var(--ink-muted);
+}
+
+.recordRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--s-3);
+  min-height: var(--row-min);
+  padding: var(--s-2) var(--s-4);
+  background: var(--surface);
+  border-bottom: 1px solid var(--line);
+}
+
+.recordValue {
+  flex: none;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+}

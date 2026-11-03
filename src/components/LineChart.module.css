@@ -1,0 +1,45 @@
+.wrap {
+  width: 100%;
+  background: var(--surface);
+  border-bottom: 1px solid var(--line);
+  padding: var(--s-2) 0;
+}
+
+.wrap svg {
+  display: block;
+}
+
+.grid {
+  stroke: var(--line);
+  stroke-width: 1;
+  shape-rendering: crispEdges;
+}
+
+.tick,
+.goalLabel {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  fill: var(--ink-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.goalLabel {
+  fill: var(--ink);
+}
+
+.goal {
+  stroke: var(--accent);
+  stroke-width: 1.5;
+  stroke-dasharray: 4 4;
+}
+
+.dot {
+  fill: var(--ink-muted);
+}
+
+.avg {
+  fill: none;
+  stroke: var(--ink);
+  stroke-width: 2;
+  stroke-linejoin: miter;
+}
