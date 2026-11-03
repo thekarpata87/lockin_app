@@ -26,6 +26,7 @@ export function Hoy() {
         <SectionLabel>En construcción</SectionLabel>
         <p className={styles.muted}>Las comidas, el agua y los hábitos llegan en el hito M3.</p>
       </section>
+      <p className={styles.version}>Versión {__APP_VERSION__}</p>
     </>
   )
 }

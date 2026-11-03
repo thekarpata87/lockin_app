@@ -4,9 +4,14 @@ import react from '@vitejs/plugin-react'
 import { VitePWA } from 'vite-plugin-pwa'
 
 const BASE = '/lockin_app/'
+// Short commit SHA in CI, 'local' otherwise. Changes every deploy, so the SW always updates.
+const APP_VERSION = (process.env.GITHUB_SHA ?? 'local').slice(0, 7)
 
 export default defineConfig({
   base: BASE,
+  define: {
+    __APP_VERSION__: JSON.stringify(APP_VERSION),
+  },
   plugins: [
     react(),
     VitePWA({
