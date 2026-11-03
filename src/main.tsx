@@ -30,6 +30,8 @@ void (async () => {
   // supabase-js loads after the first render (separate chunk, still precached for offline).
   const { supabaseRemote } = await import('./sync/remote')
   await startSync(supabaseRemote())
+  const { startPush } = await import('./sync/push')
+  startPush()
 })().catch((e: unknown) => console.error(e))
 
 createRoot(document.getElementById('root')!).render(

@@ -20,6 +20,7 @@ import { daysBetween, fromISODate, today } from '../../lib/dates'
 import { rampStep } from '../../lib/now'
 import { parseDecimal } from '../../lib/today'
 import { useSyncState } from '../../sync/engine'
+import { Notifications } from './Notifications'
 import styles from './Ajustes.module.css'
 
 const THEMES: { value: Theme; label: string }[] = [
@@ -83,6 +84,9 @@ export function Ajustes() {
 
       <Head>Cuenta</Head>
       <AccountRow />
+
+      <Head>Notificaciones</Head>
+      <Notifications />
 
       <Head>Respaldo</Head>
       <BackupSection startDate={s.startDate} />

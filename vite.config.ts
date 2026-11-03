@@ -38,6 +38,8 @@ export default defineConfig({
         globPatterns: ['**/*.{js,css,html,svg,png,woff2,webmanifest}'],
         // iOS reads launch images once, when the app is added to the home screen.
         globIgnores: ['splash/**'],
+        // Push and notification-click handlers (public/push-sw.js).
+        importScripts: ['push-sw.js'],
         navigateFallback: 'index.html',
         cleanupOutdatedCaches: true,
         // No runtime caching: Supabase requests always go to the network.

@@ -19,6 +19,7 @@ import {
   timerAt,
 } from '../../lib/timer'
 import { holdWakeLock, WAKE_LOCK_HINT, wakeLockSupported } from '../../lib/wakelock'
+import { clearAlarm, setAlarm } from '../../sync/alarms'
 import { setRun } from './run'
 import type { Run } from './run'
 import styles from './Casa.module.css'
@@ -47,6 +48,18 @@ export function TimerView({ run }: { run: Run }) {
   }, [])
 
   useEffect(() => holdWakeLock(), [])
+
+  // Notification if the phone is locked when the session ends.
+  const endsAt = v.paused || v.done ? null : Date.now() + (v.totalMs - v.programMs)
+  const endKey = endsAt === null ? 'none' : Math.round(endsAt / 1000)
+  useEffect(() => {
+    if (endsAt === null) {
+      clearAlarm('cardio')
+      return
+    }
+    setAlarm('cardio', endsAt, 'Cardio terminado', `${session.name}: regresa a la app para guardarlo.`)
+  }, [endKey])
+  useEffect(() => () => clearAlarm('cardio'), [])
 
   // Beeps: 3-2-1 before each change, and on the change. Never replay missed ones after a freeze.
   const seen = useRef({ index: v.index, sec, at: now })

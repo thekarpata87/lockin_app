@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { changeBeep, tickBeep } from '../../lib/audio'
 import { countdown, displaySeconds, formatClock } from '../../lib/timer'
+import { clearAlarm, setAlarm } from '../../sync/alarms'
 import { stopRest } from './rest'
 import type { Rest } from './rest'
 import styles from './Gym.module.css'
@@ -17,6 +18,11 @@ export function RestBar({ rest }: { rest: Rest }) {
 
   const c = countdown(rest.endAt, rest.totalMs, now)
   const sec = displaySeconds(c.remainingMs)
+
+  useEffect(() => {
+    setAlarm('rest', rest.endAt, 'Descanso terminado', 'Siguiente serie.')
+    return () => clearAlarm('rest')
+  }, [rest.endAt])
 
   const late = now - rest.endAt > 1500
   useEffect(() => {

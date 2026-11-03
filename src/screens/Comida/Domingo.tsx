@@ -9,6 +9,7 @@ import { changeBeep, unlockAudio } from '../../lib/audio'
 import { containers, fmtOffset, freshMeals, prepSteps } from '../../lib/prep'
 import { countdown, displaySeconds, formatClock } from '../../lib/timer'
 import { holdWakeLock, WAKE_LOCK_HINT, wakeLockSupported } from '../../lib/wakelock'
+import { clearAlarm, setAlarm } from '../../sync/alarms'
 import { startStepTimer, stopStepTimer, toggleStepDone, usePrep } from './prepTimers'
 import { useWeekPlan } from './week'
 import { WeekToggle } from './WeekToggle'
@@ -32,6 +33,16 @@ export function Domingo() {
     const id = window.setInterval(() => setNow(Date.now()), 500)
     return () => window.clearInterval(id)
   }, [running])
+
+  // Notifications for running step timers if the phone gets locked.
+  useEffect(() => {
+    const ids = Object.keys(prep.timers)
+    for (const [id, t] of Object.entries(prep.timers)) {
+      const step = steps.find((s) => s.id === id)
+      if (step) setAlarm(`prep:${id}`, t.endAt, 'Temporizador listo', step.text.split('.')[0]!)
+    }
+    return () => ids.forEach((id) => clearAlarm(`prep:${id}`))
+  }, [prep.timers, steps])
 
   // Beep once when a step timer reaches zero (only if it ended just now).
   useEffect(() => {
