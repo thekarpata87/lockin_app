@@ -1,0 +1,16 @@
+.label {
+  display: flex;
+  align-items: center;
+  gap: var(--s-2);
+  font-size: var(--t-label);
+  line-height: var(--t-label-lh);
+  font-weight: 400;
+  color: var(--ink);
+}
+
+.marker {
+  width: var(--marker);
+  height: var(--marker);
+  background: var(--ink);
+  flex: none;
+}

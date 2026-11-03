@@ -1,0 +1,19 @@
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s-2);
+  font-size: var(--t-label);
+  line-height: var(--t-label-lh);
+  color: var(--ink);
+}
+
+.marker {
+  width: var(--marker);
+  height: var(--marker);
+  flex: none;
+  background: var(--ink);
+}
+
+.pending { background: var(--accent); }
+.offline { background: transparent; border: 1px solid var(--ink); }
+.error { background: var(--danger); }

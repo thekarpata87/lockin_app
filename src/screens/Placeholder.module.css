@@ -1,0 +1,14 @@
+.row {
+  background: var(--surface);
+  border-bottom: 1px solid var(--line);
+  padding: var(--s-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-2);
+}
+
+.text {
+  color: var(--ink-muted);
+  font-size: var(--t-label);
+  line-height: var(--t-label-lh);
+}

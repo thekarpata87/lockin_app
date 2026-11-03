@@ -1,0 +1,26 @@
+.header {
+  background: var(--surface);
+  border-bottom: 1px solid var(--line);
+  padding: var(--s-3) var(--s-4) var(--s-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-4);
+}
+
+.top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  min-height: 20px;
+}
+
+.date {
+  font-size: var(--t-label);
+  line-height: var(--t-label-lh);
+  color: var(--ink-muted);
+}
+
+.title {
+  font-size: var(--t-display);
+  line-height: var(--t-display-lh);
+}

@@ -1,0 +1,40 @@
+.outer {
+  min-height: 100dvh;
+  max-width: calc(var(--frame-max) + 2 * var(--frame-gutter));
+  margin: 0 auto;
+  padding: 0 var(--frame-gutter);
+  display: flex;
+  flex-direction: column;
+}
+
+/* Keeps scrolled content from showing under the translucent status bar */
+.statusMask {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: env(safe-area-inset-top);
+  background: var(--bg);
+  z-index: 20;
+}
+
+.frame {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  border-left: 1px solid var(--line);
+  border-right: 1px solid var(--line);
+  background-color: var(--bg);
+  /* Vertical lines for the 4 columns, top to bottom */
+  background-image: linear-gradient(to right, var(--line) 1px, transparent 1px);
+  background-size: 25% 100%;
+  background-position: -1px 0;
+  padding-top: env(safe-area-inset-top);
+  padding-bottom: calc(var(--tabbar-h) + env(safe-area-inset-bottom));
+}
+
+.main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}

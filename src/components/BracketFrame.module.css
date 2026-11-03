@@ -1,0 +1,22 @@
+.frame {
+  position: absolute;
+  pointer-events: none;
+  color: var(--ink-muted);
+  transition: color var(--dur) var(--ease);
+}
+
+.active {
+  color: var(--accent);
+}
+
+.c {
+  position: absolute;
+  width: var(--bracket);
+  height: var(--bracket);
+  border: 0 solid currentColor;
+}
+
+.tl { top: 0; left: 0; border-top-width: var(--bracket-stroke); border-left-width: var(--bracket-stroke); }
+.tr { top: 0; right: 0; border-top-width: var(--bracket-stroke); border-right-width: var(--bracket-stroke); }
+.bl { bottom: 0; left: 0; border-bottom-width: var(--bracket-stroke); border-left-width: var(--bracket-stroke); }
+.br { bottom: 0; right: 0; border-bottom-width: var(--bracket-stroke); border-right-width: var(--bracket-stroke); }
