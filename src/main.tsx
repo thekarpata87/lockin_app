@@ -17,6 +17,9 @@ import { officialStartReset } from './db/reset'
 import { today } from './lib/dates'
 import { startSync } from './sync/engine'
 
+// Real orientation lock where the browser allows it (not iOS; the CSS hint covers that).
+void (screen.orientation as ScreenOrientation & { lock?: (o: string) => Promise<void> })?.lock?.('portrait').catch(() => undefined)
+
 // Ask iOS not to evict IndexedDB (SPEC §5.5).
 void navigator.storage?.persist?.().catch(() => undefined)
 

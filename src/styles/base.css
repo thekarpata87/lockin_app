@@ -98,3 +98,54 @@ a {
     animation-duration: 0s !important;
   }
 }
+
+/* ---- Portrait only (phones). The app keeps running underneath. ---- */
+.rotate-hint {
+  display: none;
+}
+
+@media (orientation: landscape) and (max-height: 540px) {
+  .rotate-hint {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: var(--s-3);
+    padding: env(safe-area-inset-top) max(var(--s-8), env(safe-area-inset-right)) env(safe-area-inset-bottom) max(var(--s-8), env(safe-area-inset-left));
+    background-color: var(--bg);
+    background-image: linear-gradient(to right, var(--line) 1px, transparent 1px);
+    background-size: 25% 100%;
+    color: var(--ink);
+  }
+
+  #root {
+    visibility: hidden;
+  }
+
+  body {
+    overflow: hidden;
+  }
+}
+
+.rotate-hint__mark {
+  width: 48px;
+  height: 48px;
+  background: var(--accent);
+}
+
+.rotate-hint__title {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: var(--t-display);
+  line-height: var(--t-display-lh);
+  letter-spacing: -0.02em;
+}
+
+.rotate-hint__text {
+  max-width: 44ch;
+  font-size: var(--t-body);
+  line-height: var(--t-body-lh);
+  color: var(--ink-muted);
+}

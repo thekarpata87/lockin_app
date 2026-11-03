@@ -24,6 +24,12 @@
   </head>
   <body>
     <div id="root"></div>
+    <!-- iOS ignores the manifest orientation: cover the app in landscape on phones. -->
+    <div class="rotate-hint" role="alert" aria-live="assertive">
+      <span class="rotate-hint__mark" aria-hidden="true"></span>
+      <p class="rotate-hint__title">GIRA TU IPHONE</p>
+      <p class="rotate-hint__text">BLOQUE se usa en vertical. Tus registros y temporizadores siguen corriendo.</p>
+    </div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
