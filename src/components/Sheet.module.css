@@ -6,6 +6,37 @@
   display: flex;
   align-items: flex-end;
   justify-content: center;
+  animation: sheet-fade var(--dur-slow) var(--ease) both;
+}
+
+.panel {
+  animation: sheet-up var(--dur-slow) var(--ease) both;
+}
+
+.closing {
+  animation: sheet-fade-out 220ms var(--ease-in) both;
+  pointer-events: none;
+}
+
+.closing .panel {
+  animation: sheet-down 220ms var(--ease-in) both;
+}
+
+@keyframes sheet-fade {
+  from { opacity: 0; }
+}
+@keyframes sheet-fade-out {
+  to { opacity: 0; }
+}
+@keyframes sheet-up {
+  from { transform: translateY(100%); }
+}
+@keyframes sheet-down {
+  to { transform: translateY(100%); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .backdrop, .panel, .closing, .closing .panel { animation: none; }
 }
 
 .panel {

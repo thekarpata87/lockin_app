@@ -61,7 +61,9 @@ export function Habits({ date, dayKey, log, sleepTime, creatineG, flexOtherDay }
 
 function StepsRow({ date, steps }: { date: string; steps: number | undefined }) {
   const [draft, setDraft] = useState(steps !== undefined ? String(steps) : '')
-  useEffect(() => setDraft(steps !== undefined ? String(steps) : ''), [steps])
+  useEffect(() => {
+    setDraft(steps !== undefined ? String(steps) : '')
+  }, [steps])
   const commit = () => {
     const clean = draft.replace(/[^\d]/g, '')
     const n = clean === '' ? undefined : Number(clean)

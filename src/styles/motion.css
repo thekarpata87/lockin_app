@@ -1,0 +1,84 @@
+/* Motion system (DESIGN §8). Global classes so CSS Modules can share them. */
+
+/* Section change: the block slides sideways by a short distance, toward the direction of travel. */
+.anim-slide {
+  animation: m-slide var(--dur-page) var(--ease) both;
+}
+@keyframes m-slide {
+  from {
+    transform: translateX(calc(var(--dir, 1) * 40px));
+    opacity: 0;
+  }
+}
+
+/* Drill-in (recipe detail): the whole block slides in from the right edge. */
+.anim-push {
+  animation: m-push var(--dur-slow) var(--ease) both;
+}
+@keyframes m-push {
+  from {
+    transform: translateX(100%);
+  }
+}
+
+/* Content that appears in place (a new exercise, a summary): rises a few px. */
+.anim-rise {
+  animation: m-rise var(--dur-slow) var(--ease) both;
+}
+@keyframes m-rise {
+  from {
+    transform: translateY(12px);
+    opacity: 0;
+  }
+}
+
+.anim-fade {
+  animation: m-fade var(--dur) var(--ease) both;
+}
+@keyframes m-fade {
+  from {
+    opacity: 0;
+  }
+}
+
+/* The app's check draws itself. */
+.check-draw path {
+  stroke-dasharray: 24;
+  stroke-dashoffset: 0;
+  animation: m-draw 220ms var(--ease) both;
+}
+@keyframes m-draw {
+  from {
+    stroke-dashoffset: 24;
+  }
+}
+
+/* Square boxes that fill from the bottom, like blocks. Add .is-on to fill. */
+.fill-box {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+.fill-box::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--accent);
+  transform: scaleY(0);
+  transform-origin: bottom;
+  transition: transform var(--dur-fill) var(--ease);
+}
+.fill-box.is-on::after {
+  transform: scaleY(1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .anim-slide,
+  .anim-push,
+  .anim-rise,
+  .anim-fade,
+  .check-draw path {
+    animation: none;
+  }
+}

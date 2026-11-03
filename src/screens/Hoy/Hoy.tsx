@@ -60,7 +60,7 @@ export function Hoy() {
       />
       <NowRow
         item={now}
-        mealDetail={(m) => mealSubtitle(m, recipeFor(m))}
+        mealDetail={(m) => mealSubtitle(m, recipeFor(m), plan?.swaps)}
         mealDone={(m) => isMealDone(log, m)}
         onToggleMeal={(m) => void toggleMeal(date, m, isMealDone(log, m))}
       />

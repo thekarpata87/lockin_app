@@ -82,7 +82,7 @@ export function Domingo() {
                   role="checkbox"
                   aria-checked={done}
                   aria-label={`Paso ${i + 1} hecho`}
-                  className={`${styles.prepCheck} ${done ? styles.prepCheckOn : ''}`}
+                  className={`${styles.prepCheck} fill-box ${done ? `${styles.prepCheckOn} is-on` : ''}`}
                   onClick={() => toggleStepDone(weekStart, s.id)}
                 >
                   {done ? <CheckMark size={20} /> : null}

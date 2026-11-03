@@ -3,6 +3,7 @@ import { Link } from 'react-router'
 import { Button } from '../../components/Button'
 import { ChecklistRow } from '../../components/ChecklistRow'
 import { SectionLabel } from '../../components/SectionLabel'
+import { Slide } from '../../components/Slide'
 import { Sheet } from '../../components/Sheet'
 import { useToast } from '../../components/Toast'
 import { MEALS } from '../../data/foods'
@@ -10,9 +11,9 @@ import { RECIPE_BY_ID, recipesForMeal, TAG_LABELS } from '../../data/recipes'
 import { STORAGE_RULES } from '../../data/rules'
 import { DAY_ORDER } from '../../data/types'
 import type { DayKey } from '../../data/types'
-import { autoPlan, needsFreshWarning, PICK_LIMITS, PLAN_DAYS, setDayRecipe, togglePick } from '../../lib/plan'
+import { autoPlan, needsFreshWarning, PICK_LIMITS, PLAN_DAYS, recipeName, setDayRecipe, togglePick } from '../../lib/plan'
 import type { PlanMeal } from '../../lib/plan'
-import { useWeekPlan } from './week'
+import { useWeekChoice, useWeekPlan } from './week'
 import { WeekToggle } from './WeekToggle'
 import styles from './Comida.module.css'
 
@@ -23,6 +24,7 @@ const PLURAL: Record<PlanMeal, string> = { comida: 'comidas', cena: 'cenas', des
 export function Semana() {
   const toast = useToast()
   const { plan, save } = useWeekPlan()
+  const choice = useWeekChoice()
   const [picking, setPicking] = useState<PlanMeal | null>(null)
   const [editing, setEditing] = useState<{ day: DayKey; meal: PlanMeal } | null>(null)
 
@@ -32,6 +34,7 @@ export function Semana() {
   return (
     <>
       <WeekToggle />
+      <Slide id={choice} pos={choice === 'this' ? 0 : 1}>
       <div className={styles.sectionHead}>
         <SectionLabel>Recetas de la semana</SectionLabel>
       </div>
@@ -44,7 +47,7 @@ export function Semana() {
               <span>
                 {MEALS[meal].name} <span className={styles.muted}>· elige {lim.min} a {lim.max}</span>
               </span>
-              <span className={styles.muted}>{picks.length ? picks.map((id) => RECIPE_BY_ID.get(id)?.name).join(' · ') : 'Sin elegir'}</span>
+              <span className={styles.muted}>{picks.length ? picks.map((id) => recipeName(id, plan)).join(' · ') : 'Sin elegir'}</span>
             </span>
             <span className={styles.count}>
               {picks.length}/{lim.max}
@@ -84,7 +87,7 @@ export function Semana() {
                     <button key={meal} type="button" className={styles.slot} onClick={() => setEditing({ day, meal })}>
                       <span className={styles.slotMeal}>{MEALS[meal].name}</span>
                       <span className={styles.slotText}>
-                        <span>{r?.name ?? 'Sin receta'}</span>
+                        <span>{r ? recipeName(r.id, plan) : 'Sin receta'}</span>
                         {needsFreshWarning(day, meal, id) ? <span className={styles.warnText}>{STORAGE_RULES.freshWarning}</span> : null}
                       </span>
                     </button>
@@ -94,6 +97,7 @@ export function Semana() {
             </section>
           ))
         : null}
+      </Slide>
 
       <Sheet title={picking ? `Elige ${PLURAL[picking]}` : ''} open={picking !== null} onClose={() => setPicking(null)}>
         {picking ? (
@@ -107,7 +111,7 @@ export function Semana() {
               return (
                 <ChecklistRow
                   key={r.id}
-                  label={r.name}
+                  label={recipeName(r.id, plan) ?? r.name}
                   detail={`${r.minutes} min · ${r.tags.map((t) => TAG_LABELS[t]).join(' · ')}${full ? ' · quita una para elegir esta' : ''}`}
                   checked={on}
                   onChange={() => {
@@ -139,7 +143,7 @@ export function Semana() {
               return (
                 <ChecklistRow
                   key={id}
-                  label={r.name}
+                  label={recipeName(id, plan) ?? r.name}
                   detail={`${plan.picks[editing.meal].includes(id) ? 'Elegida para la semana · ' : ''}${r.tags.map((t) => TAG_LABELS[t]).join(' · ')}${
                     needsFreshWarning(editing.day, editing.meal, id) ? ' · conviene fresca' : ''
                   }`}

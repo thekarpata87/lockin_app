@@ -5,6 +5,7 @@ import { CheckMark } from '../../components/CheckMark'
 import { ScreenHeader } from '../../components/ScreenHeader'
 import { SectionLabel } from '../../components/SectionLabel'
 import { Segmented } from '../../components/Segmented'
+import { Slide } from '../../components/Slide'
 import { CARDIO_BY_ID, CARDIO_RULES, CIRCUIT_B, HOME_CARDIO_WEEK } from '../../data/cardio'
 import type { CardioKind } from '../../data/cardio'
 import { listCardio } from '../../db/repo/cardio'
@@ -58,6 +59,7 @@ export function Casa() {
 
       <Segmented label="Sesión" options={OPTIONS} value={kind} onChange={setKind} />
 
+      <Slide id={kind} pos={OPTIONS.findIndex((o) => o.value === kind)}>
       <section className={styles.block}>
         <p className={styles.title}>{s.name}</p>
         <p className={styles.muted}>
@@ -94,6 +96,7 @@ export function Casa() {
 
       {warning ? <p className={styles.warn}>{warning}</p> : null}
       {kind === 'B' || kind === 'C' ? <p className={styles.note}>{CARDIO_RULES.knees}</p> : null}
+      </Slide>
 
       <div className={styles.actions}>
         <Button block onClick={start}>

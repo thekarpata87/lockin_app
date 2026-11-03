@@ -4,6 +4,7 @@ import { Button } from '../../components/Button'
 import { ScreenHeader } from '../../components/ScreenHeader'
 import { SectionLabel } from '../../components/SectionLabel'
 import { Segmented } from '../../components/Segmented'
+import { Slide } from '../../components/Slide'
 import { GYM_DAY_BY_KEY, GYM_DAYS, GYM_RULES } from '../../data/routines'
 import type { GymDayKey } from '../../data/routines'
 import { getSettings } from '../../db/repo/settings'
@@ -47,7 +48,9 @@ export function Gym() {
 
   // Current exercise: the user's pick, else the first one not finished.
   const [selected, setSelected] = useState<string | null>(null)
-  useEffect(() => setSelected(null), [active?.id, dayKey])
+  useEffect(() => {
+    setSelected(null)
+  }, [active?.id, dayKey])
   const firstOpen = day.exercises.find((e) => completedSeries(e, sets) < targetSets(e, reduced))
   const current = day.exercises.find((e) => e.id === selected) ?? firstOpen
   const [finishing, setFinishing] = useState(false)
@@ -71,6 +74,7 @@ export function Gym() {
         <Segmented label="Día de la rutina" options={DAY_OPTIONS} value={picked} onChange={setPicked} />
       ) : null}
 
+      <Slide id={`${active?.id ?? 'idle'}:${dayKey}`} pos={GYM_DAYS.findIndex((d) => d.key === dayKey)}>
       {finished && !active ? <SessionSummary session={finished} /> : null}
 
       {!active && !isGymDay(todayKey) ? (
@@ -132,6 +136,8 @@ export function Gym() {
           </ul>
         </section>
       ) : null}
+
+      </Slide>
 
       {active ? <FinishSheet open={finishing} onClose={() => setFinishing(false)} session={active} sets={sets} date={date} /> : null}
     </>

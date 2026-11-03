@@ -196,3 +196,28 @@
   font-size: var(--t-body);
   text-align: center;
 }
+
+.timer {
+  animation: timer-up var(--dur-slow) var(--ease) both;
+}
+
+@keyframes timer-up {
+  from { transform: translateY(100%); }
+}
+
+/* Each new phase: the countdown block slides up into place */
+.phaseBlock {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--s-3);
+  animation: phase-in var(--dur-slow) var(--ease) both;
+}
+
+@keyframes phase-in {
+  from { transform: translateY(16px); opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .timer, .phaseBlock { animation: none; }
+}

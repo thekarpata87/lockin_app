@@ -85,7 +85,7 @@ export function SetLogger({ session, exercise: e, position, count, sets, last, r
   }
 
   return (
-    <section className={styles.logger} aria-label={`Registrar ${e.name}`}>
+    <section className={`${styles.logger} anim-rise`} aria-label={`Registrar ${e.name}`}>
       <div className={styles.current}>
         <BracketFrame active inset={6} />
         <p className={styles.currentTitle}>

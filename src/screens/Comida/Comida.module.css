@@ -150,6 +150,7 @@
   min-height: 44px;
   font-size: var(--t-label);
   color: var(--ink-muted);
+  transition: background-color var(--dur-slow) var(--ease), color var(--dur-slow) var(--ease);
 }
 
 .filter + .filter {
@@ -322,11 +323,14 @@
   top: 0;
   bottom: 0;
   width: 4px;
-  background: transparent;
+  background: var(--accent);
+  transform: scaleY(0);
+  transform-origin: bottom;
+  transition: transform var(--dur-slow) var(--ease);
 }
 
 .prepDone::before {
-  background: var(--accent);
+  transform: scaleY(1);
 }
 
 .prepHead {
@@ -353,7 +357,6 @@
 }
 
 .prepCheckOn {
-  background: var(--accent);
   border-color: var(--accent);
 }
 
@@ -425,4 +428,81 @@
 .reminder {
   border-left: 4px solid var(--accent);
   padding-left: var(--s-3);
+}
+
+.filters4 {
+  display: grid;
+  grid-template-columns: 1.3fr 1.2fr 1.2fr 1fr;
+  border-bottom: 1px solid var(--line);
+  background: var(--surface);
+}
+
+.filters4 .filter + .filter {
+  border-left: 1px solid var(--line);
+}
+
+.recipeItem {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr 56px;
+  background: var(--surface);
+  border-bottom: 1px solid var(--line);
+}
+
+.recipeItem .recipeRow {
+  border-bottom: 0;
+}
+
+/* Recipes in the week carry the orange left stripe */
+.recipeItem::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  background: var(--accent);
+  transform: scaleY(0);
+  transform-origin: bottom;
+  transition: transform var(--dur-slow) var(--ease);
+}
+
+.recipeInWeek::before {
+  transform: scaleY(1);
+}
+
+.inWeekText {
+  color: var(--ink);
+  font-weight: 500;
+}
+
+.quickAdd {
+  border-left: 1px solid var(--line);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--ink);
+  transition: background-color var(--dur) var(--ease), color var(--dur) var(--ease);
+}
+
+.quickAddOn {
+  color: var(--on-accent);
+}
+
+.inWeek {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s-2);
+  font-size: var(--t-label);
+  font-weight: 500;
+  color: var(--ink);
+}
+
+.inWeek svg {
+  color: var(--accent);
+}
+
+.altRow .muted {
+  flex: none;
+  white-space: nowrap;
 }

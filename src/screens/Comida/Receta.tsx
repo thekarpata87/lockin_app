@@ -13,7 +13,7 @@ import { RECIPE_BY_ID, recipesForMeal, TAG_LABELS } from '../../data/recipes'
 import { setMealRecipe } from '../../db/repo/dailyLogs'
 import { amountForBlocks, itemBlocks, recipeBlocks } from '../../lib/blocks'
 import { today } from '../../lib/dates'
-import { PICK_LIMITS, setSwap, togglePick, withSwaps } from '../../lib/plan'
+import { isInWeek, PICK_LIMITS, setSwap, togglePick, withSwaps } from '../../lib/plan'
 import { useWeekChoice, useWeekPlan, weekRangeLabel } from './week'
 import styles from './Comida.module.css'
 
@@ -55,6 +55,12 @@ export function Receta() {
         <CardTabs tags={recipe.tags.map((t) => TAG_LABELS[t])} />
         <div className={styles.recipeHeadBody}>
           <h2 className={styles.recipeTitle}>{recipe.name}</h2>
+          {recipe.name !== base.name ? <p className={styles.muted}>Original: {base.name}</p> : null}
+          {isInWeek(plan, id) ? (
+            <p className={styles.inWeek}>
+              <CheckMark size={16} /> En {choice === 'this' ? 'esta semana' : 'la próxima semana'}
+            </p>
+          ) : null}
           <MiniBlocks blocks={recipeBlocks(recipe)} />
           <p className={styles.muted}>
             {recipe.minutes} min · {storage}

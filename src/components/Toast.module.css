@@ -18,3 +18,22 @@
   font-size: var(--t-label);
   line-height: var(--t-label-lh);
 }
+
+.toast {
+  animation: toast-in var(--dur-slow) var(--ease) both;
+}
+
+.leaving {
+  animation: toast-out 200ms var(--ease-in) both;
+}
+
+@keyframes toast-in {
+  from { transform: translateY(calc(100% + var(--s-2))); opacity: 0; }
+}
+@keyframes toast-out {
+  to { transform: translateY(calc(100% + var(--s-2))); opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .toast, .leaving { animation: none; }
+}

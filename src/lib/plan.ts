@@ -63,6 +63,43 @@ export function needsFreshWarning(day: DayKey, meal: PlanMeal, recipeId: string 
   return !RECIPE_BY_ID.get(recipeId)?.tags.includes('cong')
 }
 
+/** How each protein reads inside a recipe name, and the words that name it today. */
+const PROTEIN_WORD: Record<string, { word: string; match: RegExp }> = {
+  pollo: { word: 'pollo', match: /\bpollo\b/i },
+  res: { word: 'res', match: /\b(bistec|res)\b/i },
+  cerdo: { word: 'cerdo', match: /\b(lomo de cerdo|cerdo)\b/i },
+  pescado: { word: 'pescado', match: /\bpescado\b/i },
+  salmon: { word: 'salmón', match: /\bsalmón\b/i },
+  camaron: { word: 'camarón', match: /\bcamarones\b|\bcamarón\b/i },
+  atun: { word: 'atún', match: /\batún\b/i },
+  panela: { word: 'panela', match: /\bpanela\b/i },
+  huevo: { word: 'huevo', match: /\bhuevos?\b/i },
+  claras: { word: 'claras', match: /\bclaras\b/i },
+  pavo: { word: 'pavo', match: /\bpavo\b/i },
+  whey: { word: 'proteína', match: /\bproteína\b|\bproteico\b/i },
+}
+
+const capitalize = (s: string) => s.charAt(0).toUpperCase() + s.slice(1)
+
+/** "Tacos de pollo deshebrado" + {pollo: 'res'} → "Tacos de res deshebrado". */
+export function swappedName(name: string, swaps: Record<string, string> | undefined): string {
+  if (!swaps) return name
+  let out = name
+  for (const [from, to] of Object.entries(swaps)) {
+    const a = PROTEIN_WORD[from]
+    const b = PROTEIN_WORD[to]
+    if (!a || !b || from === to) continue
+    const m = out.match(a.match)
+    if (m && m.index !== undefined) {
+      const word = m.index === 0 ? capitalize(b.word) : b.word
+      out = out.slice(0, m.index) + word + out.slice(m.index + m[0].length)
+    } else {
+      out = `${out} con ${b.word}`
+    }
+  }
+  return out
+}
+
 const PROTEIN_TASK: Partial<Record<string, PrepTask>> = { pollo: 'pollo', res: 'res', cerdo: 'cerdo' }
 
 const fmtAmount = (n: number) => (Number.isInteger(n) ? String(n) : String(Number(n.toFixed(2))))
@@ -81,8 +118,18 @@ export function withSwaps(recipe: Recipe, swaps: Record<string, string> | undefi
   const tasks = new Set(recipe.prepTasks.filter((t) => !(Object.values(PROTEIN_TASK) as PrepTask[]).includes(t) || [...foods].some((f) => PROTEIN_TASK[f] === t)))
   if (!foods.has('pollo')) tasks.delete('deshebrar')
   if (recipe.tags.includes('prep')) for (const f of foods) if (PROTEIN_TASK[f]) tasks.add(PROTEIN_TASK[f]!)
-  return { ...recipe, ingredients, prepTasks: [...tasks] }
+  return { ...recipe, name: swappedName(recipe.name, swaps), ingredients, prepTasks: [...tasks] }
 }
+
+/** Name of a recipe as it reads this week (with protein swaps). */
+export function recipeName(id: string | null | undefined, plan: WeekPlan | undefined): string | undefined {
+  const r = id ? RECIPE_BY_ID.get(id) : undefined
+  return r ? swappedName(r.name, plan?.swaps?.[r.id]) : undefined
+}
+
+/** Is this recipe chosen or placed anywhere in the week? */
+export const isInWeek = (plan: WeekPlan, id: string) =>
+  PLAN_MEALS.some((m) => plan.picks[m].includes(id)) || Object.values(plan.days).some((d) => d && Object.values(d).includes(id))
 
 export type PlannedMeal = { day: DayKey; meal: PlanMeal; recipe: Recipe }
 

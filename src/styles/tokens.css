@@ -54,10 +54,13 @@
   --marker: 6px;
   --chamfer: polygon(8px 0, 100% 0, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0 100%, 0 8px);
 
-  /* Motion */
-  --dur: 150ms;
-  --dur-fill: 120ms;
-  --ease: cubic-bezier(0.2, 0.7, 0.3, 1);
+  /* Motion: blocks slide and fill; never bounce */
+  --dur: 160ms;
+  --dur-fill: 180ms;
+  --dur-slow: 280ms;
+  --dur-page: 260ms;
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-in: cubic-bezier(0.55, 0, 0.75, 0.2);
 }
 
 @media (prefers-color-scheme: dark) {

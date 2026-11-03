@@ -54,7 +54,7 @@ export function NowRow({ item, mealDetail, mealDone, onToggleMeal }: Props) {
             role="checkbox"
             aria-checked={done}
             aria-label={`${label} hecha`}
-            className={`${styles.box} ${styles.boxBig} ${done ? styles.boxOn : ''}`}
+            className={`${styles.box} ${styles.boxBig} fill-box ${done ? `${styles.boxOn} is-on` : ''}`}
             onClick={() => onToggleMeal(meal)}
           >
             {done ? <CheckMark size={26} /> : null}

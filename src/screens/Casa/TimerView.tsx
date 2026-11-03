@@ -100,19 +100,21 @@ export function TimerView({ run }: { run: Run }) {
 
       <div className={styles.timerMain}>
         <BracketFrame active={!isWork} inset={0} />
-        <p className={`display ${styles.phase}`}>{v.paused ? 'PAUSA' : (p?.title ?? 'LISTO')}</p>
-        <p className={`display ${styles.count}`} aria-label={`${sec} segundos`}>
-          {formatClock(sec, true)}
-        </p>
-        {p?.kind === 'work' && p.detail ? <p className={styles.exercise}>{p.detail}</p> : null}
-        {p?.cue && p.kind === 'work' ? <p className={styles.cue}>{p.cue}</p> : null}
-        {p?.kind === 'rest' && p.detail ? <p className={styles.exercise}>{p.detail}</p> : null}
-        {p && p.kind !== 'work' && p.kind !== 'rest' && p.detail ? <p className={styles.cue}>{p.detail}</p> : null}
-        {p?.kind === 'work' && v.next ? (
-          <p className={styles.cue}>
-            Sigue: {v.next.kind === 'rest' ? `${v.next.title.toLowerCase()} ${v.next.sec} s` : v.next.title.toLowerCase()}
+        <div key={v.paused ? 'pause' : v.index} className={styles.phaseBlock}>
+          <p className={`display ${styles.phase}`}>{v.paused ? 'PAUSA' : (p?.title ?? 'LISTO')}</p>
+          <p className={`display ${styles.count}`} aria-label={`${sec} segundos`}>
+            {formatClock(sec, true)}
           </p>
-        ) : null}
+          {p?.kind === 'work' && p.detail ? <p className={styles.exercise}>{p.detail}</p> : null}
+          {p?.cue && p.kind === 'work' ? <p className={styles.cue}>{p.cue}</p> : null}
+          {p?.kind === 'rest' && p.detail ? <p className={styles.exercise}>{p.detail}</p> : null}
+          {p && p.kind !== 'work' && p.kind !== 'rest' && p.detail ? <p className={styles.cue}>{p.detail}</p> : null}
+          {p?.kind === 'work' && v.next ? (
+            <p className={styles.cue}>
+              Sigue: {v.next.kind === 'rest' ? `${v.next.title.toLowerCase()} ${v.next.sec} s` : v.next.title.toLowerCase()}
+            </p>
+          ) : null}
+        </div>
         {!wakeLockSupported() ? <p className={styles.cue}>{WAKE_LOCK_HINT}</p> : null}
       </div>
 

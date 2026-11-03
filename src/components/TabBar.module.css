@@ -1,5 +1,6 @@
 .bar {
   position: fixed;
+  isolation: isolate;
   bottom: 0;
   left: 50%;
   transform: translateX(-50%);
@@ -38,9 +39,24 @@
   color: var(--ink);
 }
 
-/* Brackets only on the active tab */
-.tab:not(.active) > span[aria-hidden='true'] {
-  display: none;
+.cursor {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 20%;
+  height: var(--tabbar-h);
+  transform: translateX(calc(100% * var(--i)));
+  transition: transform var(--dur-slow) var(--ease);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.tab svg {
+  transition: transform var(--dur) var(--ease);
+}
+
+.tab:active svg {
+  transform: translateY(1px);
 }
 
 .label {

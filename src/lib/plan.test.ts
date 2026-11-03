@@ -3,7 +3,7 @@ import { getRecipe } from '../data/recipes'
 import { emptyWeekPlan } from '../db/repo/weeklyPlans'
 import type { WeekPlan } from '../db/schema'
 import { recipeBlocks } from './blocks'
-import { autoPlan, distribute, needsFreshWarning, plannedMeals, setDayRecipe, setSwap, togglePick, withSwaps } from './plan'
+import { autoPlan, distribute, isInWeek, needsFreshWarning, plannedMeals, setDayRecipe, setSwap, swappedName, togglePick, withSwaps } from './plan'
 import { containers, freshMeals, prepSteps } from './prep'
 import { formatGrams, shoppingList } from './shopping'
 
@@ -56,6 +56,23 @@ describe('protein swap for the week', () => {
 
   it('pollo → res on shredded tacos drops deshebrar and adds the steak step', () => {
     expect(withSwaps(getRecipe('cen-tacos-pollo'), { pollo: 'res' }).prepTasks.sort()).toEqual(['nopales', 'res'])
+  })
+
+  it('renames the recipe after the new protein', () => {
+    expect(swappedName('Tacos de pollo deshebrado', { pollo: 'res' })).toBe('Tacos de res deshebrado')
+    expect(swappedName('Tacos de bistec', { res: 'pollo' })).toBe('Tacos de pollo')
+    expect(swappedName('Lomo de cerdo con elote', { cerdo: 'pollo' })).toBe('Pollo con elote')
+    expect(swappedName('Pescado con papa y ensalada', { pescado: 'salmon' })).toBe('Salmón con papa y ensalada')
+    expect(swappedName('Camarones al ajo con arroz', { camaron: 'pescado' })).toBe('Pescado al ajo con arroz')
+    expect(swappedName('Quesadillas de panela y pollo', { pollo: 'pavo' })).toBe('Quesadillas de panela y pavo')
+    expect(swappedName('Huevos con verdura', { claras: 'pavo' })).toBe('Huevos con verdura con pavo')
+    expect(withSwaps(getRecipe('cen-tacos-pollo'), { pollo: 'res' }).name).toBe('Tacos de res deshebrado')
+  })
+
+  it('knows when a recipe is in the week', () => {
+    const w = testWeek()
+    expect(isInWeek(w, 'com-bowl-pollo')).toBe(true)
+    expect(isInWeek(w, 'com-pasta-pollo')).toBe(false)
   })
 
   it('setSwap stores and clears', () => {

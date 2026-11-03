@@ -1,17 +1,31 @@
 .seg {
+  position: relative;
   display: grid;
   background: var(--surface);
   border-bottom: 1px solid var(--line);
 }
 
+/* The selected block travels between cells */
+.indicator {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: calc(100% / var(--n));
+  transform: translateX(calc(100% * var(--i)));
+  background: var(--inverse);
+  transition: transform var(--dur-slow) var(--ease);
+}
+
 .opt {
+  position: relative;
   min-height: 48px;
   font-size: var(--t-label);
   font-weight: 500;
   letter-spacing: 0.04em;
   text-transform: uppercase;
   color: var(--ink-muted);
-  transition: background-color var(--dur) var(--ease), color var(--dur) var(--ease);
+  transition: color var(--dur-slow) var(--ease);
 }
 
 .opt + .opt {
@@ -19,6 +33,5 @@
 }
 
 .on {
-  background: var(--inverse);
   color: var(--on-inverse);
 }

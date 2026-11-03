@@ -14,7 +14,7 @@ import type { MealKey } from '../../data/types'
 import { setMealFilled, setMealRecipe } from '../../db/repo/dailyLogs'
 import type { DailyLog } from '../../db/schema'
 import { clampFilled, fillMeal, mealGroups, mealProgress, recipeBlocks } from '../../lib/blocks'
-import { withSwaps } from '../../lib/plan'
+import { recipeName, withSwaps } from '../../lib/plan'
 import { isMealOverdue } from '../../lib/today'
 import { shortTime } from './format'
 import styles from './Hoy.module.css'
@@ -41,9 +41,9 @@ export const isMealDone = (log: DailyLog | undefined, meal: MealKey) =>
 
 export const toggleMeal = (date: string, meal: MealKey, done: boolean) => setMealFilled(date, meal, done ? {} : fillMeal(meal))
 
-export function mealSubtitle(meal: MealKey, recipeId: string | null) {
+export function mealSubtitle(meal: MealKey, recipeId: string | null, swaps?: Swaps) {
   if (meal === 'pre') return '1 fruta + creatina'
-  return RECIPE_BY_ID.get(recipeId ?? '')?.name ?? 'Armar con bloques'
+  return recipeName(recipeId, swaps ? { picks: { desayuno: [], colacion: [], comida: [], cena: [] }, days: {}, swaps } : undefined) ?? 'Armar con bloques'
 }
 
 export function Meals({ date, time, currentMeal, swaps, log, recipeFor, plannedFor }: Props) {
@@ -66,7 +66,7 @@ export function Meals({ date, time, currentMeal, swaps, log, recipeFor, plannedF
               type="button"
               className={styles.mealText}
               onClick={() => setOpen({ kind: recipe ? 'recipe' : 'equiv', meal })}
-              aria-label={`${MEALS[meal].name}, ${mealSubtitle(meal, recipeFor(meal))}. Ver detalle`}
+              aria-label={`${MEALS[meal].name}, ${mealSubtitle(meal, recipeFor(meal), swaps)}. Ver detalle`}
             >
               <span className={styles.mealTime}>{shortTime(MEAL_TIMES[meal])}</span>
               <span className={styles.mealBody}>
@@ -74,7 +74,7 @@ export function Meals({ date, time, currentMeal, swaps, log, recipeFor, plannedF
                   {MEALS[meal].name}
                   {overdue ? <span className={styles.pending}>Pendiente</span> : null}
                 </span>
-                <span className={styles.mealSub}>{mealSubtitle(meal, recipeFor(meal))}</span>
+                <span className={styles.mealSub}>{mealSubtitle(meal, recipeFor(meal), swaps)}</span>
               </span>
             </button>
             <button
@@ -82,7 +82,7 @@ export function Meals({ date, time, currentMeal, swaps, log, recipeFor, plannedF
               role="checkbox"
               aria-checked={done}
               aria-label={`${MEALS[meal].name} hecha`}
-              className={`${styles.box} ${done ? styles.boxOn : ''}`}
+              className={`${styles.box} fill-box ${done ? `${styles.boxOn} is-on` : ''}`}
               onClick={() => void toggleMeal(date, meal, done)}
             >
               {done ? <CheckMark size={22} /> : null}
@@ -91,7 +91,7 @@ export function Meals({ date, time, currentMeal, swaps, log, recipeFor, plannedF
         )
       })}
 
-      <Sheet title={open ? sheetTitle(open, recipeFor) : ''} open={open !== null} onClose={close}>
+      <Sheet title={open ? sheetTitle(open, recipeFor, swaps) : ''} open={open !== null} onClose={close}>
         {open?.kind === 'recipe' ? (
           <RecipeView recipe={swapped(recipeFor(open.meal), swaps)} onChange={() => setOpen({ kind: 'choose', meal: open.meal })} />
         ) : null}
@@ -120,8 +120,8 @@ function swapped(id: string | null, swaps: Swaps): Recipe | undefined {
   return r ? withSwaps(r, swaps?.[r.id]) : undefined
 }
 
-function sheetTitle(o: NonNullable<Open>, recipeFor: (m: MealKey) => string | null) {
-  if (o.kind === 'recipe') return RECIPE_BY_ID.get(recipeFor(o.meal) ?? '')?.name ?? 'Receta'
+function sheetTitle(o: NonNullable<Open>, recipeFor: (m: MealKey) => string | null, swaps: Swaps) {
+  if (o.kind === 'recipe') return swapped(recipeFor(o.meal), swaps)?.name ?? 'Receta'
   if (o.kind === 'equiv') return `Equivalentes · ${MEALS[o.meal].name}`
   return `Receta de ${MEALS[o.meal].name.toLowerCase()}`
 }

@@ -11,7 +11,7 @@ export function ChecklistRow({ label, detail, checked, onChange }: Props) {
         <span>{label}</span>
         {detail ? <span className={styles.detail}>{detail}</span> : null}
       </span>
-      <span className={`${styles.box} ${checked ? styles.on : ''}`}>{checked ? <CheckMark size={22} /> : null}</span>
+      <span className={`${styles.box} fill-box ${checked ? `${styles.on} is-on` : ''}`}>{checked ? <CheckMark size={22} /> : null}</span>
     </button>
   )
 }

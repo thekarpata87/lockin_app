@@ -7,6 +7,7 @@ import { LineChart } from '../../components/LineChart'
 import { ScreenHeader } from '../../components/ScreenHeader'
 import { SectionLabel } from '../../components/SectionLabel'
 import { Segmented } from '../../components/Segmented'
+import { Slide } from '../../components/Slide'
 import { Sheet } from '../../components/Sheet'
 import { EXERCISE_BY_ID, RECORD_EXERCISES } from '../../data/routines'
 import { WEIGH_IN_GUIDE } from '../../data/rules'
@@ -88,6 +89,7 @@ export function Progreso() {
           </div>
 
           <Segmented label="Rango de la gráfica" options={RANGES} value={range} onChange={setRange} />
+          <Slide id={String(range)} pos={RANGES.findIndex((r) => r.value === range)}>
           <LineChart
             points={inRange.map((w) => ({ date: w.date, value: w.weightKg }))}
             avg={avgLine.map((p) => ({ date: p.date, value: p.avg }))}
@@ -95,6 +97,7 @@ export function Progreso() {
             from={from}
             to={date}
           />
+          </Slide>
           <p className={styles.legend}>
             <span className={styles.legDot} /> Diario <span className={styles.legLine} /> Promedio 7 días <span className={styles.legGoal} /> Meta
           </p>

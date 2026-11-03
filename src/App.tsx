@@ -1,4 +1,7 @@
-import { HashRouter, Navigate, Route, Routes } from 'react-router'
+import { useEffect } from 'react'
+import type { ReactNode } from 'react'
+import { HashRouter, Navigate, Route, Routes, useLocation } from 'react-router'
+import { Slide } from './components/Slide'
 import { AppFrame } from './components/AppFrame'
 import { TabBar } from './components/TabBar'
 import { ToastProvider } from './components/Toast'
@@ -21,6 +24,7 @@ export function App() {
           </>
         }
       >
+        <TabSlide>
         <Routes>
           <Route path="/hoy" element={<Hoy />} />
           <Route path="/comida/*" element={<Comida />} />
@@ -29,8 +33,25 @@ export function App() {
           <Route path="/progreso" element={<Progreso />} />
           <Route path="*" element={<Navigate to="/hoy" replace />} />
         </Routes>
+        </TabSlide>
       </AppFrame>
       </ToastProvider>
     </HashRouter>
+  )
+}
+
+const TAB_ORDER = ['hoy', 'comida', 'gym', 'casa', 'progreso']
+
+/** Top-level tabs slide sideways in tab-bar order; each tab starts at the top. */
+function TabSlide({ children }: { children: ReactNode }) {
+  const { pathname } = useLocation()
+  const tab = pathname.split('/')[1] || 'hoy'
+  useEffect(() => {
+    window.scrollTo(0, 0)
+  }, [tab])
+  return (
+    <Slide id={tab} pos={TAB_ORDER.indexOf(tab)}>
+      {children}
+    </Slide>
   )
 }

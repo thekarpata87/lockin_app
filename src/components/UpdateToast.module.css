@@ -32,3 +32,16 @@
   letter-spacing: 0.04em;
   clip-path: var(--chamfer);
 }
+
+.toast {
+  animation: update-in var(--dur-slow) var(--ease) both;
+}
+
+@keyframes update-in {
+  from { transform: translate(-50%, calc(100% + var(--s-2))); opacity: 0; }
+  to { transform: translate(-50%, 0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .toast { animation: none; }
+}

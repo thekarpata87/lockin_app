@@ -258,11 +258,27 @@ Segmented arriba: **Semana · Recetas · Súper · Domingo**.
 
 ## 8. Movimiento
 
-- Cambios de estado: 150 ms con ease-out. Sin rebotes.
-- Llenar un bloque: la celda se llena de abajo hacia arriba en 120 ms.
+El movimiento sigue la idea de bloques: los bloques **se recorren** y **se llenan**, nunca rebotan ni giran. Nada aparece ni desaparece de golpe.
+
+**Tokens** (`tokens.css`): `--dur` 160 ms (color y estado), `--dur-fill` 180 ms (llenar una celda), `--dur-slow` 280 ms (indicadores y paneles), `--dur-page` 260 ms (cambio de sección). Curva `--ease` (salida suave, sin rebote) y `--ease-in` para salidas.
+
+| Qué | Cómo |
+|---|---|
+| Cambio de pestaña o de sección (COMIDA, días del gym, sesiones de casa, filtros, rango de la gráfica, semana) | El bloque se desliza 40 px hacia la dirección del recorrido (izquierda o derecha según el orden) mientras aparece. Clase `anim-slide`, componente `Slide`. |
+| Entrar al detalle de una receta | Slide in desde el borde derecho (`anim-push`). Al volver, la lista entra desde la izquierda. |
+| Control segmentado y barra de pestañas | El bloque invertido y las marcas de visor **viajan** a la opción elegida en lugar de saltar. |
+| Panel inferior (`Sheet`) | Sube desde abajo al abrir y baja al cerrar; el fondo se atenúa. |
+| Toast | Entra subiendo desde abajo y sale bajando. |
+| Casillas, celdas de agua, bloques y botones de agregar | Se llenan de naranja de abajo hacia arriba (`fill-box`). El check propio se dibuja en 220 ms. |
+| Bloques del día en HOY | Cada cuadro se llena proporcionalmente de abajo hacia arriba (420 ms). |
+| Franjas naranjas (comida hecha, paso hecho, receta en la semana) | Crecen de abajo hacia arriba. |
+| Temporizador de casa | Sube a pantalla completa; cada fase nueva entra subiendo 16 px. |
+| Ejercicio nuevo en el gym | Entra subiendo 12 px (`anim-rise`). |
+
 - **Un solo momento orquestado:** cuando se completan todos los bloques del día, la fila protagonista de HOY se invierte a naranja durante 400 ms y queda con la franja naranja.
-- No hay animaciones de entrada por sección, ni efectos hover en tarjetas, ni parallax.
-- Con `prefers-reduced-motion`, todas las transiciones son instantáneas.
+- Las animaciones no corren al abrir la app, solo cuando algo cambia.
+- No hay parallax, ni efectos hover en tarjetas, ni escalas, ni sombras.
+- Con `prefers-reduced-motion`, todas las transiciones y animaciones son instantáneas.
 
 ---
 
