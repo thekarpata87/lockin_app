@@ -13,7 +13,7 @@ import { RECIPE_BY_ID, recipesForMeal, TAG_LABELS } from '../../data/recipes'
 import { setMealRecipe } from '../../db/repo/dailyLogs'
 import { amountForBlocks, itemBlocks, recipeBlocks } from '../../lib/blocks'
 import { today } from '../../lib/dates'
-import { isInWeek, PICK_LIMITS, setSwap, togglePick, withSwaps } from '../../lib/plan'
+import { isInWeek, PICK_LIMITS, setSwap, toggleInWeek, withSwaps } from '../../lib/plan'
 import { useWeekChoice, useWeekPlan, weekRangeLabel } from './week'
 import styles from './Comida.module.css'
 
@@ -31,7 +31,7 @@ export function Receta() {
 
   const swaps = plan.swaps?.[id]
   const recipe = withSwaps(base, swaps)
-  const inWeek = plan.picks[recipe.meal].includes(id)
+  const inWeek = isInWeek(plan, id)
   const full = plan.picks[recipe.meal].length >= PICK_LIMITS[recipe.meal].max
   const proteinItems = base.ingredients.flatMap((i) => (i.group === 'P' ? (i.items ?? []) : []))
   const weekLabel = `${choice === 'this' ? 'esta semana' : 'la próxima semana'} (${weekRangeLabel(weekStart)})`
@@ -113,7 +113,7 @@ export function Receta() {
           block
           disabled={!inWeek && full}
           onClick={() => {
-            void save(togglePick(plan, recipe.meal, id))
+            void save(toggleInWeek(plan, recipe.meal, id))
             toast(inWeek ? 'Quitada de la semana' : 'Agregada a la semana')
           }}
         >

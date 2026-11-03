@@ -33,10 +33,20 @@ export function updateSettings(patch: Partial<SettingsData>): Promise<SettingsRo
   )
 }
 
+/**
+ * Timestamp for settings the app creates by itself (first launch, defaults). It's older than
+ * anything a person writes, so settings already in Supabase always win on the first sync.
+ */
+export const BOOTSTRAP_UPDATED_AT = 1
+
 /** First launch: the plan starts today. No-op once set. */
 export async function ensureStartDate(todayIso: string): Promise<string> {
-  const s = await getSettings()
-  if (s.startDate) return s.startDate
+  const row = await db.settings.get('me')
+  if (row?.data.startDate) return row.data.startDate
+  if (!row) {
+    await db.settings.put({ id: 'me', data: { ...DEFAULT_SETTINGS, startDate: todayIso }, updatedAt: BOOTSTRAP_UPDATED_AT, deleted: 0, dirty: 1 })
+    return todayIso
+  }
   await updateSettings({ startDate: todayIso })
   return todayIso
 }

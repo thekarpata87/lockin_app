@@ -49,6 +49,40 @@ export function togglePick(plan: WeekPlan, meal: PlanMeal, id: string): WeekPlan
   return { ...plan, picks: { ...plan.picks, [meal]: next } }
 }
 
+/** Has this meal already been placed on any day? */
+const isPlaced = (plan: WeekPlan, meal: PlanMeal) => Object.values(plan.days).some((d) => d?.[meal])
+
+/** Re-place one meal over its days from the current picks (empty picks clear it). */
+export function replaceMeal(plan: WeekPlan, meal: PlanMeal): WeekPlan {
+  const placed = distribute(plan.picks[meal], PLAN_DAYS[meal])
+  const days: WeekPlan['days'] = {}
+  for (const day of DAY_ORDER) {
+    const d = { ...plan.days[day] }
+    if (placed[day]) d[meal] = placed[day]
+    else delete d[meal]
+    if (Object.keys(d).length) days[day] = d
+  }
+  return { ...plan, days }
+}
+
+/**
+ * Add or remove a recipe from the week. Removing takes it out of every day too.
+ * If the week was already distributed, that meal is re-placed so the days stay in sync.
+ */
+export function toggleInWeek(plan: WeekPlan, meal: PlanMeal, id: string): WeekPlan {
+  const removing = isInWeek(plan, id)
+  const placed = isPlaced(plan, meal)
+  let next: WeekPlan
+  if (removing) {
+    next = { ...plan, picks: { ...plan.picks, [meal]: plan.picks[meal].filter((x) => x !== id) } }
+  } else {
+    if (plan.picks[meal].length >= PICK_LIMITS[meal].max) return plan
+    next = togglePick(plan, meal, id)
+  }
+  if (placed || removing) next = replaceMeal(next, meal)
+  return next
+}
+
 export function setDayRecipe(plan: WeekPlan, day: DayKey, meal: PlanMeal, id: string | undefined): WeekPlan {
   const dayPlan = { ...plan.days[day] }
   if (id) dayPlan[meal] = id

@@ -11,7 +11,7 @@ import { MEALS } from '../../data/foods'
 import { RECIPES, TAG_LABELS } from '../../data/recipes'
 import type { RecipeTag } from '../../data/recipes'
 import { recipeBlocks } from '../../lib/blocks'
-import { isInWeek, PICK_LIMITS, recipeName, togglePick } from '../../lib/plan'
+import { isInWeek, PICK_LIMITS, recipeName, toggleInWeek } from '../../lib/plan'
 import type { PlanMeal } from '../../lib/plan'
 import { useWeekChoice, useWeekPlan } from './week'
 import styles from './Comida.module.css'
@@ -66,7 +66,7 @@ export function Recetas() {
       <ul className={styles.recipeList}>
         {list.map((r) => {
           const inWeek = isInWeek(plan, r.id)
-          const picked = plan.picks[r.meal].includes(r.id)
+          const picked = inWeek
           const full = !picked && plan.picks[r.meal].length >= PICK_LIMITS[r.meal].max
           return (
             <li key={r.id} className={`${styles.recipeItem} ${inWeek ? styles.recipeInWeek : ''}`}>
@@ -91,7 +91,7 @@ export function Recetas() {
                     toast(`Ya tienes ${PICK_LIMITS[r.meal].max} ${MEALS[r.meal].name.toLowerCase()}s. Quita una primero.`)
                     return
                   }
-                  void save(togglePick(plan, r.meal, r.id))
+                  void save(toggleInWeek(plan, r.meal, r.id))
                   toast(picked ? 'Quitada de la semana' : 'Agregada a la semana')
                 }}
               >

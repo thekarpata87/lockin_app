@@ -14,6 +14,7 @@ import styles from './Hoy.module.css'
 type Props = {
   date: string
   planDay: number | null
+  startDate: string | null
   today: BodyMetric | undefined
   latest: BodyMetric | undefined
   celebrating: boolean
@@ -21,7 +22,8 @@ type Props = {
 }
 
 /** The protagonist block of HOY: plan day and today's weight (with corner ■ markers). */
-export function HeroStats({ date, planDay, today, latest, celebrating, dayComplete }: Props) {
+export function HeroStats({ date, planDay, startDate, today, latest, celebrating, dayComplete }: Props) {
+  const notYet = planDay !== null && planDay < 1
   const [open, setOpen] = useState(false)
   return (
     <>
@@ -31,8 +33,8 @@ export function HeroStats({ date, planDay, today, latest, celebrating, dayComple
         <span className={`${styles.mk} ${styles.mkBl}`} aria-hidden="true" />
         <span className={`${styles.mk} ${styles.mkBr}`} aria-hidden="true" />
         <div className={styles.stat}>
-          <span className={styles.number}>{planDay === null ? '—' : String(planDay).padStart(3, '0')}</span>
-          <span className={styles.label}>Día del plan</span>
+          <span className={styles.number}>{planDay === null || notYet ? '—' : String(planDay).padStart(3, '0')}</span>
+          <span className={styles.label}>{notYet && startDate ? `Empieza ${planDay === 0 ? 'mañana' : `el ${startDate.slice(8)}/${startDate.slice(5, 7)}`}` : 'Día del plan'}</span>
         </div>
         <button type="button" className={`${styles.stat} ${styles.weightBtn}`} onClick={() => setOpen(true)} aria-label="Registrar peso de hoy">
           <span className={styles.number}>{today?.weightKg?.toFixed(1) ?? '—'}</span>

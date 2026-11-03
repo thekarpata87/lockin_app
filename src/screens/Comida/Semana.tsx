@@ -11,7 +11,7 @@ import { RECIPE_BY_ID, recipesForMeal, TAG_LABELS } from '../../data/recipes'
 import { STORAGE_RULES } from '../../data/rules'
 import { DAY_ORDER } from '../../data/types'
 import type { DayKey } from '../../data/types'
-import { autoPlan, needsFreshWarning, PICK_LIMITS, PLAN_DAYS, recipeName, setDayRecipe, togglePick } from '../../lib/plan'
+import { autoPlan, isInWeek, needsFreshWarning, PICK_LIMITS, PLAN_DAYS, recipeName, setDayRecipe, toggleInWeek } from '../../lib/plan'
 import type { PlanMeal } from '../../lib/plan'
 import { useWeekChoice, useWeekPlan } from './week'
 import { WeekToggle } from './WeekToggle'
@@ -106,7 +106,7 @@ export function Semana() {
               Elige de {PICK_LIMITS[picking].min} a {PICK_LIMITS[picking].max}. Se alternan sin repetir dos días seguidos.
             </p>
             {recipesForMeal(picking).map((r) => {
-              const on = plan.picks[picking].includes(r.id)
+              const on = isInWeek(plan, r.id)
               const full = !on && plan.picks[picking].length >= PICK_LIMITS[picking].max
               return (
                 <ChecklistRow
@@ -116,7 +116,7 @@ export function Semana() {
                   checked={on}
                   onChange={() => {
                     if (full) return
-                    void save(togglePick(plan, picking, r.id))
+                    void save(toggleInWeek(plan, picking, r.id))
                   }}
                 />
               )

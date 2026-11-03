@@ -317,6 +317,8 @@ end $$;
 
 Solo puede correr una sincronización a la vez (mutex).
 
+**Orden de cada pasada: primero pull y después push.** Así un registro local viejo (por ejemplo, los ajustes por defecto de una instalación nueva) nunca sobrescribe en Supabase una versión más reciente: el pull aplica la regla de "gana la última escritura" y el push solo sube lo que sigue sucio. Los ajustes que la app crea sola llevan `updatedAt = 1`, así que cualquier versión guardada en el servidor gana.
+
 **Push**, en este orden: `settings`, `workoutSessions`, `setLogs` y luego el resto.
 1. Leer los registros con `dirty = 1` en lotes de 200.
 2. Mapear camelCase a snake_case y hacer `upsert` en Supabase (onConflict según la PK).
@@ -375,6 +377,7 @@ Solo puede correr una sincronización a la vez (mutex).
 
 - Repositorio `lockin_app` (github.com/thekarpata87/lockin_app). En `vite.config.ts`, `base: '/lockin_app/'`.
 - URL final: **https://thekarpata87.github.io/lockin_app/**
+- `VITE_SUPABASE_URL` puede ir con o sin `/rest/v1/` al final; el cliente lo normaliza a `https://<proyecto>.supabase.co`.
 - Secrets `VITE_SUPABASE_URL` y `VITE_SUPABASE_ANON_KEY` en GitHub → Settings → Secrets and variables → Actions (ya creados). `VITE_SUPABASE_ANON_KEY` contiene la nueva **publishable key** de Supabase (`sb_publishable_...`), que sustituye a la anon key heredada; se usa igual en `createClient`.
 - En Settings → Pages, elegir Source: **GitHub Actions**.
 - `.github/workflows/deploy.yml`:
@@ -439,6 +442,8 @@ jobs:
 | M8 | Supabase: login, motor de sincronización y SyncBadge | 20 registros hechos offline, al volver la señal aparecen en Supabase en menos de 10 s; un cambio hecho en Supabase baja a la app |
 | M9 | Despliegue: GitHub Actions y Pages, instalación final | Push a main → en 2 min la app avisa "Nueva versión disponible" |
 | M10 | Pulido: respaldo JSON, Ajustes, accesibilidad, modo oscuro | Revisión visual contra DESIGN.md en claro y oscuro |
+
+**Inicio oficial del plan: 2026-11-04.** La versión de M8 hace una limpieza única por dispositivo (`src/db/reset.ts`): antes del 4 de noviembre borra todos los registros de prueba y fija `startDate = 2026-11-04`; el mismo 4 conserva lo registrado ese día; después no hace nada.
 
 **Orden de trabajo:** M1 → M9 (despliegue a GitHub Pages, para instalar la app en el iPhone con HTTPS desde el inicio) → M2 → M3 → … → M8 → M10. A partir de M9, cada push a `main` despliega la versión nueva. El criterio de M9 sobre "Nueva versión disponible" se vuelve a comprobar en cada hito siguiente.
 

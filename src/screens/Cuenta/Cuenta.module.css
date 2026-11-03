@@ -1,0 +1,99 @@
+.backRow {
+  display: flex;
+  background: var(--surface);
+  border-bottom: 1px solid var(--line);
+}
+
+.back {
+  width: var(--row-min);
+  height: var(--row-min);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-right: 1px solid var(--line);
+}
+
+.block {
+  background: var(--surface);
+  border-bottom: 1px solid var(--line);
+  padding: var(--s-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-3);
+}
+
+.status {
+  font-size: var(--t-body);
+  line-height: var(--t-body-lh);
+}
+
+.muted {
+  font-size: var(--t-label);
+  line-height: var(--t-label-lh);
+  color: var(--ink-muted);
+}
+
+.errorText {
+  font-size: var(--t-label);
+  line-height: var(--t-label-lh);
+  color: var(--danger);
+  border-left: 4px solid var(--danger);
+  padding-left: var(--s-2);
+}
+
+.stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1px;
+  background: var(--line);
+  border-bottom: 1px solid var(--line);
+}
+
+.stat {
+  background: var(--surface);
+  padding: var(--s-3) var(--s-4) var(--s-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-1);
+}
+
+.number {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: var(--t-number);
+  line-height: var(--t-number-lh);
+  font-variant-numeric: tabular-nums;
+}
+
+.lastValue {
+  font-size: var(--t-body);
+  font-weight: 500;
+  line-height: 1.6;
+}
+
+.email {
+  font-size: var(--t-body);
+  font-weight: 500;
+  word-break: break-all;
+}
+
+.actions {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: var(--s-2);
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-1);
+}
+
+.input {
+  min-height: 48px;
+  border: 1px solid var(--line);
+  background: var(--bg);
+  padding: 0 var(--s-3);
+  font-size: var(--t-body);
+}

@@ -53,6 +53,7 @@ export function Hoy() {
       <HeroStats
         date={date}
         planDay={settings.startDate ? planDay(settings.startDate, date) : null}
+        startDate={settings.startDate}
         today={metric}
         latest={latest}
         celebrating={celebrating}

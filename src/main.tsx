@@ -13,13 +13,21 @@ import './styles/motion.css'
 
 import { App } from './App'
 import { ensureStartDate } from './db/repo/settings'
+import { officialStartReset } from './db/reset'
 import { today } from './lib/dates'
+import { startSync } from './sync/engine'
 
 // Ask iOS not to evict IndexedDB (SPEC §5.5).
 void navigator.storage?.persist?.().catch(() => undefined)
 
-// First launch sets the plan start date ("Día 1").
-void ensureStartDate(today()).catch((e: unknown) => console.error(e))
+// One-time clean start (before 2026-11-04), then the plan start date, then sync.
+void (async () => {
+  await officialStartReset(today())
+  await ensureStartDate(today())
+  // supabase-js loads after the first render (separate chunk, still precached for offline).
+  const { supabaseRemote } = await import('./sync/remote')
+  await startSync(supabaseRemote())
+})().catch((e: unknown) => console.error(e))
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>

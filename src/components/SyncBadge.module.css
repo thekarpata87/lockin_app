@@ -2,9 +2,13 @@
   display: inline-flex;
   align-items: center;
   gap: var(--s-2);
+  min-height: 44px;
+  margin: -12px 0;
+  padding: 0 0 0 var(--s-3);
   font-size: var(--t-label);
   line-height: var(--t-label-lh);
   color: var(--ink);
+  text-decoration: none;
 }
 
 .marker {
@@ -12,8 +16,12 @@
   height: var(--marker);
   flex: none;
   background: var(--ink);
+  transition: background-color var(--dur-slow) var(--ease), border-color var(--dur-slow) var(--ease);
 }
 
+.synced { background: var(--ink); }
+.syncing { background: var(--ink-muted); }
 .pending { background: var(--accent); }
-.offline { background: transparent; border: 1px solid var(--ink); }
+.offline,
+.signedOut { background: transparent; border: 1px solid var(--ink); }
 .error { background: var(--danger); }

@@ -3,7 +3,7 @@ import { getRecipe } from '../data/recipes'
 import { emptyWeekPlan } from '../db/repo/weeklyPlans'
 import type { WeekPlan } from '../db/schema'
 import { recipeBlocks } from './blocks'
-import { autoPlan, distribute, isInWeek, needsFreshWarning, plannedMeals, setDayRecipe, setSwap, swappedName, togglePick, withSwaps } from './plan'
+import { autoPlan, distribute, isInWeek, toggleInWeek, needsFreshWarning, plannedMeals, setDayRecipe, setSwap, swappedName, togglePick, withSwaps } from './plan'
 import { containers, freshMeals, prepSteps } from './prep'
 import { formatGrams, shoppingList } from './shopping'
 
@@ -73,6 +73,32 @@ describe('protein swap for the week', () => {
     const w = testWeek()
     expect(isInWeek(w, 'com-bowl-pollo')).toBe(true)
     expect(isInWeek(w, 'com-pasta-pollo')).toBe(false)
+  })
+
+  it('removing a recipe takes it out of the picks and every day', () => {
+    const w = toggleInWeek(testWeek(), 'comida', 'com-tacos-bistec')
+    expect(isInWeek(w, 'com-tacos-bistec')).toBe(false)
+    expect(w.picks.comida).toEqual(['com-bowl-pollo'])
+    expect(Object.values(w.days).map((d) => d?.comida).filter(Boolean)).toEqual(Array(6).fill('com-bowl-pollo'))
+    // removing the last one clears that meal from the days
+    const empty = toggleInWeek(w, 'comida', 'com-bowl-pollo')
+    expect(Object.values(empty.days).some((d) => d?.comida)).toBe(false)
+    expect(empty.days.lun?.cena).toBe('cen-tacos-pollo')
+  })
+
+  it('a manual day assignment counts as in the week and is removed too', () => {
+    const w = setDayRecipe(testWeek(), 'mar', 'comida', 'com-pasta-pollo')
+    expect(isInWeek(w, 'com-pasta-pollo')).toBe(true)
+    expect(isInWeek(toggleInWeek(w, 'comida', 'com-pasta-pollo'), 'com-pasta-pollo')).toBe(false)
+  })
+
+  it('adding to a distributed week places it on the days', () => {
+    const w = toggleInWeek(testWeek(), 'comida', 'com-pasta-pollo')
+    expect(w.picks.comida).toEqual(['com-bowl-pollo', 'com-tacos-bistec', 'com-pasta-pollo'])
+    expect(w.days.mie?.comida).toBe('com-pasta-pollo')
+    // before distributing, adding only picks it
+    const p = toggleInWeek(emptyWeekPlan(), 'comida', 'com-pasta-pollo')
+    expect(p.days).toEqual({})
   })
 
   it('setSwap stores and clears', () => {
