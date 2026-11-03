@@ -82,6 +82,8 @@ export type CardioLog = SyncFields & {
 export type WeekPlan = {
   picks: { desayuno: string[]; colacion: string[]; comida: string[]; cena: string[] }
   days: Partial<Record<DayKey, Partial<Record<Exclude<MealKey, 'pre'>, string>>>>
+  /** "Cambiar proteína" for the week: recipeId → { fromFoodId: toFoodId }. */
+  swaps?: Record<string, Record<string, string>>
 }
 
 export type WeeklyPlan = SyncFields & { weekStart: string; plan: WeekPlan; shoppingChecked: string[] }

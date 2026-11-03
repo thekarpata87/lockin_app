@@ -61,7 +61,7 @@ export function Hoy() {
         item={nowItem(items, time)}
         mealDetail={(m) => (m === 'pre' ? 'Fruta + creatina' : RECIPE_BY_ID.get(recipeFor(m) ?? '')?.name ?? 'Armar con bloques')}
       />
-      <Meals date={date} log={log} recipeFor={recipeFor} plannedFor={plannedFor} />
+      <Meals date={date} swaps={plan?.swaps} log={log} recipeFor={recipeFor} plannedFor={plannedFor} />
       <Water date={date} ml={log?.waterMl ?? 0} />
       <Habits
         date={date}

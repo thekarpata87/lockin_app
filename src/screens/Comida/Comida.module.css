@@ -1,0 +1,428 @@
+.sectionHead {
+  background: var(--surface);
+  border-bottom: 1px solid var(--line);
+  padding: var(--s-4) var(--s-4) var(--s-3);
+}
+
+.muted {
+  font-size: var(--t-label);
+  line-height: var(--t-label-lh);
+  color: var(--ink-muted);
+}
+
+.note,
+.empty,
+.sheetNote {
+  background: var(--surface);
+  border-bottom: 1px solid var(--line);
+  padding: var(--s-3) var(--s-4);
+  font-size: var(--t-label);
+  line-height: var(--t-label-lh);
+  color: var(--ink-muted);
+}
+
+.empty {
+  color: var(--ink);
+  font-size: var(--t-body);
+  line-height: var(--t-body-lh);
+  padding: var(--s-4);
+}
+
+.actions {
+  background: var(--surface);
+  border-bottom: 1px solid var(--line);
+  padding: var(--s-4);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--s-3);
+}
+
+.actionsCol {
+  background: var(--surface);
+  border-bottom: 1px solid var(--line);
+  padding: var(--s-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-2);
+}
+
+.count {
+  flex: none;
+  font-size: var(--t-label);
+  font-variant-numeric: tabular-nums;
+}
+
+.index {
+  font-size: var(--t-micro);
+  line-height: var(--t-micro-lh);
+  font-weight: 500;
+  color: var(--ink-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.linkBtn {
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  font-size: var(--t-label);
+  text-underline-offset: 3px;
+}
+
+/* ---- Semana ---- */
+.pickRow {
+  width: 100%;
+  min-height: var(--row-min);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s-3);
+  padding: var(--s-3) var(--s-4);
+  background: var(--surface);
+  border-bottom: 1px solid var(--line);
+  text-align: left;
+}
+
+.pickText {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.day {
+  background: var(--surface);
+  border-bottom: 1px solid var(--line);
+}
+
+.dayHead {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--s-2);
+  padding: var(--s-4) var(--s-4) var(--s-2);
+}
+
+.slot {
+  width: 100%;
+  min-height: 48px;
+  display: grid;
+  grid-template-columns: 88px 1fr;
+  gap: var(--s-2);
+  align-items: start;
+  padding: var(--s-2) var(--s-4);
+  border-top: 1px solid var(--line);
+  text-align: left;
+}
+
+.slotMeal {
+  font-size: var(--t-label);
+  color: var(--ink-muted);
+  padding-top: 2px;
+}
+
+.slotText {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.warnText {
+  font-size: var(--t-label);
+  line-height: var(--t-label-lh);
+  color: var(--ink);
+  text-decoration: none;
+  border-left: 4px solid var(--accent);
+  padding-left: var(--s-2);
+}
+
+/* ---- Recetas ---- */
+.filters {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  border-bottom: 1px solid var(--line);
+  background: var(--surface);
+}
+
+.filter {
+  min-height: 44px;
+  font-size: var(--t-label);
+  color: var(--ink-muted);
+}
+
+.filter + .filter {
+  border-left: 1px solid var(--line);
+}
+
+.filterOn {
+  background: var(--accent);
+  color: var(--on-accent);
+}
+
+.recipeList {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.recipeRow {
+  display: flex;
+  flex-direction: column;
+  background: var(--surface);
+  border-bottom: 1px solid var(--line);
+  text-decoration: none;
+  padding-left: var(--s-4);
+}
+
+.recipeBody {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-1);
+  padding: var(--s-2) var(--s-4) var(--s-3) 0;
+}
+
+.recipeName {
+  font-size: var(--t-body);
+  line-height: var(--t-body-lh);
+  font-weight: 500;
+}
+
+.altRow {
+  min-height: var(--row-min);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--s-3);
+  padding: var(--s-2) var(--s-4);
+  background: var(--surface);
+  border-bottom: 1px solid var(--line);
+  text-decoration: none;
+}
+
+/* ---- Receta ---- */
+.backRow {
+  display: flex;
+  align-items: center;
+  gap: var(--s-2);
+  background: var(--surface);
+  border-bottom: 1px solid var(--line);
+  padding-right: var(--s-4);
+}
+
+.back {
+  width: var(--row-min);
+  height: var(--row-min);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-right: 1px solid var(--line);
+}
+
+.recipeHead {
+  background: var(--surface);
+  border-bottom: 1px solid var(--line);
+  padding-left: var(--s-4);
+}
+
+.recipeHeadBody {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-2);
+  padding: var(--s-3) var(--s-4) var(--s-4) 0;
+}
+
+.recipeTitle {
+  font-size: var(--t-title);
+  line-height: var(--t-title-lh);
+  font-weight: 500;
+}
+
+.ingList,
+.stepList {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.ingRow,
+.stepRow {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--s-3);
+  padding: var(--s-3) var(--s-4);
+  background: var(--surface);
+  border-bottom: 1px solid var(--line);
+}
+
+.stepRow {
+  justify-content: flex-start;
+}
+
+.stepRow .index {
+  padding-top: 4px;
+}
+
+.option {
+  width: 100%;
+  min-height: var(--row-min);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s-3);
+  padding: var(--s-2) var(--s-4);
+  border-bottom: 1px solid var(--line);
+  text-align: left;
+}
+
+.optionText {
+  display: flex;
+  flex-direction: column;
+}
+
+.optionMark {
+  flex: none;
+  width: 24px;
+  color: var(--accent);
+}
+
+/* ---- Súper ---- */
+.listHead {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: var(--s-3);
+  padding: var(--s-3) var(--s-4);
+  background: var(--surface);
+  border-bottom: 1px solid var(--line);
+}
+
+/* ---- Domingo ---- */
+.prepList {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.prepStep {
+  position: relative;
+  background: var(--surface);
+  border-bottom: 1px solid var(--line);
+  padding: var(--s-3) var(--s-4) var(--s-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-2);
+}
+
+.prepStep::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  background: transparent;
+}
+
+.prepDone::before {
+  background: var(--accent);
+}
+
+.prepHead {
+  display: flex;
+  align-items: center;
+  gap: var(--s-3);
+}
+
+.prepTime {
+  font-size: var(--t-label);
+  font-variant-numeric: tabular-nums;
+  flex: 1;
+}
+
+.prepCheck {
+  width: 44px;
+  height: 44px;
+  border: 1px solid var(--line);
+  background: var(--bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--on-accent);
+}
+
+.prepCheckOn {
+  background: var(--accent);
+  border-color: var(--accent);
+}
+
+/* Readable at arm's length in the kitchen */
+.prepText {
+  font-size: var(--t-title);
+  line-height: var(--t-title-lh);
+}
+
+.prepTimer {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-2);
+}
+
+.prepTimerRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.prepClock {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: var(--t-number);
+  line-height: var(--t-number-lh);
+  font-variant-numeric: tabular-nums;
+}
+
+.restTrack {
+  height: 12px;
+  background: var(--bg);
+  border: 1px solid var(--line);
+  overflow: hidden;
+}
+
+.restFill {
+  height: 100%;
+  background: var(--accent);
+  transform-origin: left;
+  transition: transform 500ms linear;
+}
+
+.boxes {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-4);
+  padding-top: var(--s-2);
+}
+
+.boxList {
+  margin: var(--s-2) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.boxList li {
+  display: grid;
+  grid-template-columns: 44px 1fr;
+  gap: var(--s-2);
+  padding: var(--s-2) 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.boxDay {
+  font-weight: 500;
+}
+
+.reminder {
+  border-left: 4px solid var(--accent);
+  padding-left: var(--s-3);
+}

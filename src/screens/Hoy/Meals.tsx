@@ -13,11 +13,13 @@ import type { MealKey } from '../../data/types'
 import { setMealFilled, setMealRecipe } from '../../db/repo/dailyLogs'
 import type { DailyLog } from '../../db/schema'
 import { clampFilled, fillMeal, mealGroups, mealProgress, mealTargets, tapCell } from '../../lib/blocks'
+import { withSwaps } from '../../lib/plan'
 import { shortTime } from './format'
 import styles from './Hoy.module.css'
 
 type Props = {
   date: string
+  swaps: Record<string, Record<string, string>> | undefined
   log: DailyLog | undefined
   recipeFor: (m: MealKey) => string | null
   plannedFor: (m: MealKey) => string | null
@@ -28,7 +30,7 @@ type Open = { kind: 'recipe' | 'choose' | 'equiv'; meal: MealKey } | null
 // CONTENT §3.1, as written.
 const PRE_TEXT = 'Opciones: 1 manzana, ½ plátano, 2 mandarinas o 1 kiwi'
 
-export function Meals({ date, log, recipeFor, plannedFor }: Props) {
+export function Meals({ date, swaps, log, recipeFor, plannedFor }: Props) {
   const [open, setOpen] = useState<Open>(null)
   const close = () => setOpen(null)
 
@@ -66,7 +68,7 @@ export function Meals({ date, log, recipeFor, plannedFor }: Props) {
 
       <Sheet title={open ? sheetTitle(open, recipeFor) : ''} open={open !== null} onClose={close}>
         {open?.kind === 'recipe' ? (
-          <RecipeView recipe={RECIPE_BY_ID.get(recipeFor(open.meal) ?? '')} onChange={() => setOpen({ kind: 'choose', meal: open.meal })} />
+          <RecipeView recipe={swapped(recipeFor(open.meal), swaps)} onChange={() => setOpen({ kind: 'choose', meal: open.meal })} />
         ) : null}
         {open?.kind === 'equiv' ? <Equivalents meal={open.meal} onChoose={open.meal === 'pre' ? undefined : () => setOpen({ kind: 'choose', meal: open.meal })} /> : null}
         {open?.kind === 'choose' ? (
@@ -84,6 +86,11 @@ export function Meals({ date, log, recipeFor, plannedFor }: Props) {
       </Sheet>
     </>
   )
+}
+
+function swapped(id: string | null, swaps: Props['swaps']): Recipe | undefined {
+  const r = RECIPE_BY_ID.get(id ?? '')
+  return r ? withSwaps(r, swaps?.[r.id]) : undefined
 }
 
 function sheetTitle(o: NonNullable<Open>, recipeFor: (m: MealKey) => string | null) {

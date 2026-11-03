@@ -33,7 +33,7 @@ export type Purchase =
   /** Sold by weight. Raw grams per block = cooked grams × rawFactor, or rawGrams. */
   | { kind: 'weight'; rawFactor?: number; rawGramsPerBlock?: number; roundTo?: number }
   /** Sold in units that hold a known number of blocks. */
-  | { kind: 'unit'; unit: string; unitPlural: string; blocksPerUnit: number; roundTo?: readonly number[] }
+  | { kind: 'unit'; unit: string; unitPlural: string; blocksPerUnit: number; roundTo?: readonly number[]; step?: number }
 
 export type Food = {
   id: string
@@ -49,8 +49,8 @@ export type Food = {
   purchase?: Purchase
 }
 
-const MEAT: Purchase = { kind: 'weight', rawFactor: 1.25 }
-const SAME_WEIGHT: Purchase = { kind: 'weight', rawFactor: 1 }
+const MEAT: Purchase = { kind: 'weight', rawFactor: 1.25, roundTo: 25 }
+const SAME_WEIGHT: Purchase = { kind: 'weight', rawFactor: 1, roundTo: 100 }
 const VEG: Purchase = { kind: 'weight', rawFactor: 1, roundTo: 100 }
 
 const protein: Food[] = [
@@ -69,9 +69,9 @@ const protein: Food[] = [
 ]
 
 const cereal: Food[] = [
-  { id: 'tortilla', name: 'Tortilla de maíz', group: 'C', perBlock: { amount: 1, unit: 'pza' }, portion: '1 pza', section: 'tortilleria', purchase: { kind: 'unit', unit: 'kg', unitPlural: 'kg', blocksPerUnit: 33 } },
-  { id: 'arroz', name: 'Arroz cocido', group: 'C', perBlock: { amount: 0.25, unit: 'taza' }, portion: '¼ taza (~40 g cocido, ~14 g crudo)', grams: 40, section: 'abarrotes', purchase: { kind: 'weight', rawGramsPerBlock: 14 } },
-  { id: 'pasta', name: 'Pasta cocida', group: 'C', perBlock: { amount: 0.5, unit: 'taza' }, portion: '½ taza (~70 g cocida, ~30 g cruda)', grams: 70, section: 'abarrotes', purchase: { kind: 'weight', rawGramsPerBlock: 30 } },
+  { id: 'tortilla', name: 'Tortilla de maíz', group: 'C', perBlock: { amount: 1, unit: 'pza' }, portion: '1 pza', section: 'tortilleria', purchase: { kind: 'unit', unit: 'kg', unitPlural: 'kg', blocksPerUnit: 33, step: 0.5 } },
+  { id: 'arroz', name: 'Arroz cocido', group: 'C', perBlock: { amount: 0.25, unit: 'taza' }, portion: '¼ taza (~40 g cocido, ~14 g crudo)', grams: 40, section: 'abarrotes', purchase: { kind: 'weight', rawGramsPerBlock: 14, roundTo: 50 } },
+  { id: 'pasta', name: 'Pasta cocida', group: 'C', perBlock: { amount: 0.5, unit: 'taza' }, portion: '½ taza (~70 g cocida, ~30 g cruda)', grams: 70, section: 'abarrotes', purchase: { kind: 'weight', rawGramsPerBlock: 30, roundTo: 50 } },
   { id: 'panIntegral', name: 'Pan integral', group: 'C', perBlock: { amount: 1, unit: 'rebanada' }, portion: '1 rebanada', section: 'abarrotes' },
   { id: 'bolillo', name: 'Bolillo sin migajón', group: 'C', perBlock: { amount: 0.5, unit: 'pza' }, portion: '½ pza', section: 'panaderia' },
   { id: 'avena', name: 'Avena en hojuelas', group: 'C', perBlock: { amount: 0.25, unit: 'taza' }, portion: '¼ taza (~20 g)', grams: 20, section: 'abarrotes' },
@@ -166,3 +166,33 @@ export const PRE_OPTIONS: readonly { foodId: string; amount: number; unit: 'pza'
   { foodId: 'mandarina', amount: 2, unit: 'pza' },
   { foodId: 'kiwi', amount: 1, unit: 'pza' },
 ]
+
+/**
+ * Approximate raw grams per cup / per piece, used only to turn cups into a shopping weight.
+ * Not in CONTENT.md; standard reference values (rounded).
+ */
+export const SHOP_WEIGHTS: Readonly<Record<string, { cupG?: number; pieceG?: number }>> = {
+  lechuga: { cupG: 50 },
+  espinaca: { cupG: 30 },
+  pepino: { cupG: 120, pieceG: 300 },
+  jitomate: { cupG: 180, pieceG: 150 },
+  cebolla: { cupG: 160 },
+  pimiento: { cupG: 150, pieceG: 160 },
+  calabacita: { cupG: 120 },
+  brocoli: { cupG: 90 },
+  coliflor: { cupG: 100 },
+  nopales: { cupG: 150 },
+  champinones: { cupG: 70 },
+  ejotes: { cupG: 110 },
+  zanahoria: { cupG: 130 },
+  esparragos: { cupG: 135 },
+  chayote: { cupG: 130 },
+  fresa: { cupG: 150 },
+  blueberries: { cupG: 145 },
+  melon: { cupG: 160 },
+  papaya: { cupG: 145 },
+  frambuesa: { cupG: 125 },
+  pina: { cupG: 165 },
+  sandia: { cupG: 150 },
+  uvas: { cupG: 150 },
+}
