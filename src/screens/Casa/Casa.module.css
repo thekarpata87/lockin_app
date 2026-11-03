@@ -1,0 +1,198 @@
+.block {
+  background: var(--surface);
+  border-bottom: 1px solid var(--line);
+  padding: var(--s-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-2);
+}
+
+.sectionHead {
+  background: var(--surface);
+  border-bottom: 1px solid var(--line);
+  padding: var(--s-4) var(--s-4) var(--s-3);
+}
+
+.title {
+  font-size: var(--t-title);
+  line-height: var(--t-title-lh);
+  font-weight: 500;
+}
+
+.muted {
+  font-size: var(--t-label);
+  line-height: var(--t-label-lh);
+  color: var(--ink-muted);
+}
+
+.note,
+.warn {
+  background: var(--surface);
+  border-bottom: 1px solid var(--line);
+  padding: var(--s-3) var(--s-4);
+  font-size: var(--t-label);
+  line-height: var(--t-label-lh);
+  color: var(--ink-muted);
+}
+
+.warn {
+  color: var(--ink);
+  border-left: 4px solid var(--accent);
+}
+
+.list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.row {
+  min-height: var(--row-min);
+  display: flex;
+  align-items: flex-start;
+  gap: var(--s-3);
+  padding: var(--s-3) var(--s-4);
+  background: var(--surface);
+  border-bottom: 1px solid var(--line);
+  justify-content: space-between;
+}
+
+.list .row {
+  justify-content: flex-start;
+}
+
+.rowText {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.index {
+  font-size: var(--t-micro);
+  font-weight: 500;
+  color: var(--ink-muted);
+  padding-top: 4px;
+  width: 24px;
+}
+
+.doneMark {
+  color: var(--accent);
+}
+
+.actions {
+  background: var(--surface);
+  border-bottom: 1px solid var(--line);
+  padding: var(--s-4);
+}
+
+/* ---- Full-screen timer ---- */
+.timer {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  display: flex;
+  flex-direction: column;
+  background: var(--surface);
+  color: var(--ink);
+  padding: calc(env(safe-area-inset-top) + var(--s-4)) var(--s-4) calc(env(safe-area-inset-bottom) + var(--s-4));
+  max-width: calc(var(--frame-max) + 2 * var(--frame-gutter));
+  margin: 0 auto;
+  transition: background-color var(--dur) var(--ease), color var(--dur) var(--ease);
+}
+
+.work {
+  background: var(--accent);
+  color: var(--on-accent);
+}
+
+.timerTop {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: var(--s-3);
+  padding-bottom: var(--s-4);
+  border-bottom: 1px solid currentColor;
+}
+
+.timerName {
+  font-size: var(--t-title);
+  line-height: 1;
+}
+
+.timerRound {
+  font-size: var(--t-label);
+  font-variant-numeric: tabular-nums;
+}
+
+.timerMain {
+  position: relative;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  gap: var(--s-3);
+  padding: var(--s-6) var(--s-4);
+  margin: var(--s-4) 0;
+}
+
+.phase {
+  font-size: min(var(--t-display), 11vw);
+  line-height: var(--t-display-lh);
+}
+
+.count {
+  font-size: var(--t-hero);
+  line-height: var(--t-hero-lh);
+  font-variant-numeric: tabular-nums;
+  font-weight: 800;
+}
+
+.exercise {
+  font-size: var(--t-title);
+  line-height: var(--t-title-lh);
+  font-weight: 500;
+}
+
+.cue {
+  font-size: var(--t-label);
+  line-height: var(--t-label-lh);
+  opacity: 0.8;
+}
+
+.paused .count {
+  opacity: 0.5;
+}
+
+.timerButtons {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+}
+
+.work .timerButtons > :last-child {
+  border-color: var(--on-accent);
+  color: var(--on-accent);
+}
+
+.exit {
+  min-height: 44px;
+  margin-top: var(--s-2);
+  font-size: var(--t-label);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  align-self: center;
+  padding: 0 var(--s-4);
+}
+
+.exitBox {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-3);
+}
+
+.exitText {
+  font-size: var(--t-body);
+  text-align: center;
+}
