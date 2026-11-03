@@ -1,0 +1,136 @@
+.backRow {
+  display: flex;
+  background: var(--surface);
+  border-bottom: 1px solid var(--line);
+}
+
+.back {
+  width: var(--row-min);
+  height: var(--row-min);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-right: 1px solid var(--line);
+}
+
+.sectionHead {
+  background: var(--surface);
+  border-bottom: 1px solid var(--line);
+  padding: var(--s-4) var(--s-4) var(--s-2);
+}
+
+.field {
+  min-height: var(--row-min);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--s-3);
+  padding: var(--s-2) var(--s-4);
+  background: var(--surface);
+  border-bottom: 1px solid var(--line);
+}
+
+.fieldCol {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-1);
+}
+
+.inputWrap {
+  display: flex;
+  align-items: center;
+  gap: var(--s-2);
+}
+
+.input {
+  min-height: 44px;
+  border: 1px solid var(--line);
+  background: var(--bg);
+  padding: 0 var(--s-3);
+  font-size: var(--t-body);
+  font-variant-numeric: tabular-nums;
+  color: var(--ink);
+}
+
+.num {
+  width: 7ch;
+  text-align: right;
+}
+
+.unit {
+  font-size: var(--t-label);
+  color: var(--ink-muted);
+  width: 2ch;
+}
+
+.caption {
+  background: var(--surface);
+  padding: var(--s-3) var(--s-4) var(--s-2);
+  font-size: var(--t-label);
+  color: var(--ink-muted);
+}
+
+.muted {
+  font-size: var(--t-label);
+  line-height: var(--t-label-lh);
+  color: var(--ink-muted);
+}
+
+.linkRow {
+  min-height: var(--row-min);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s-3);
+  padding: var(--s-2) var(--s-4);
+  background: var(--surface);
+  border-bottom: 1px solid var(--line);
+  text-decoration: none;
+}
+
+.linkText {
+  display: flex;
+  flex-direction: column;
+}
+
+.actions,
+.sheetPad {
+  background: var(--surface);
+  border-bottom: 1px solid var(--line);
+  padding: var(--s-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-3);
+}
+
+.sheetPad {
+  border-bottom: 0;
+}
+
+.warn {
+  background: var(--surface);
+  border-bottom: 1px solid var(--line);
+  border-left: 4px solid var(--accent);
+  padding: var(--s-3) var(--s-4);
+  font-size: var(--t-label);
+  line-height: var(--t-label-lh);
+}
+
+.errorText {
+  font-size: var(--t-label);
+  color: var(--danger);
+}
+
+.danger {
+  border-color: var(--danger);
+  color: var(--danger);
+}
+
+.version {
+  background: var(--surface);
+  border-bottom: 1px solid var(--line);
+  padding: var(--s-3) var(--s-4);
+  font-size: var(--t-micro);
+  font-weight: 500;
+  color: var(--ink-muted);
+}

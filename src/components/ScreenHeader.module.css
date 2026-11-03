@@ -24,3 +24,25 @@
   font-size: var(--t-display);
   line-height: var(--t-display-lh);
 }
+
+.right {
+  display: flex;
+  align-items: center;
+  gap: var(--s-1);
+  margin-right: calc(-1 * var(--s-3));
+}
+
+.gear {
+  width: 44px;
+  height: 44px;
+  margin: -12px 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--ink-muted);
+  transition: color var(--dur) var(--ease);
+}
+
+.gear:active {
+  color: var(--ink);
+}

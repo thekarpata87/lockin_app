@@ -164,12 +164,12 @@
 /* ---- Water ---- */
 .water {
   display: grid;
-  grid-template-columns: repeat(12, 1fr);
-  padding: 0 var(--s-2);
+  grid-template-columns: repeat(6, 1fr);
+  padding: 0 var(--s-2) var(--s-1);
 }
 
 .waterHit {
-  height: 48px;
+  height: 44px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -177,7 +177,7 @@
 
 .waterCell {
   position: relative;
-  width: min(22px, 100%);
+  width: 26px;
   aspect-ratio: 1;
   border: 1px solid var(--line);
   background: var(--bg);
@@ -439,7 +439,7 @@
   font-size: var(--t-label);
   font-family: var(--font-mono);
   font-weight: 400;
-  color: var(--ink-muted);
+  color: var(--ink);
   margin-left: 2px;
 }
 

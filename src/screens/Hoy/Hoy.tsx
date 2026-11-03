@@ -17,7 +17,6 @@ import { DayBlocks } from './DayBlocks'
 import { isMealDone, Meals, mealSubtitle, toggleMeal } from './Meals'
 import { NowRow } from './NowRow'
 import { Water } from './Water'
-import styles from './Hoy.module.css'
 
 const CELEBRATE_MS = 400
 
@@ -76,7 +75,6 @@ export function Hoy() {
         creatineG={settings.creatineG}
         flexOtherDay={flexUsedOtherDay(weekLogs ?? [], date)}
       />
-      <p className={styles.version}>Versión {__APP_VERSION__}</p>
     </>
   )
 }
