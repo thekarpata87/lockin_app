@@ -1,6 +1,7 @@
-// Web Push (iOS 16.4+, installed app). Alarms are scheduled on the server only while the app
-// is hidden (screen off / another app), and cancelled when it comes back, so you never get a
-// notification while looking at the app. The server sends them (Edge Function + pg_cron).
+// Web Push (iOS 16.4+, installed app). Each alarm is scheduled on the server as soon as it starts
+// (while the app is open, so the request always gets out). If you are still looking at the app
+// near the end, it cancels the push ~20 s before, so notifications only arrive when the phone is
+// locked or you're in another app. The server sends them (Edge Function + pg_cron every 15 s).
 import { useSyncExternalStore } from 'react'
 import { normalizeSupabaseUrl, supabase } from './supabase'
 
@@ -80,7 +81,9 @@ export async function enablePush(): Promise<PushStatus> {
   } catch {
     // ignore
   }
-  return refreshAndGet()
+  const st = await refreshAndGet()
+  for (const [tag, a] of alarms) onAlarm(tag, a)
+  return st
 }
 
 export async function disablePush(): Promise<PushStatus> {
@@ -103,7 +106,8 @@ async function refreshAndGet() {
   return status
 }
 
-import { alarms } from './alarms'
+import { alarms, onAlarmChange } from './alarms'
+import type { Alarm } from './alarms'
 
 function rest(path: string, init: RequestInit) {
   if (!URL_BASE || !KEY || !session) return
@@ -114,20 +118,70 @@ function rest(path: string, init: RequestInit) {
   }).catch(() => undefined)
 }
 
+/** The server may send up to ~5 s early and runs every 15 s; cancel with margin. */
+const CANCEL_BEFORE_MS = 20_000
+const cancelTimers = new Map<string, number>()
+const active = () => status === 'on' && !!session && !!supabase
+
+const row = (tag: string, a: Alarm) => ({
+  user_id: session!.userId,
+  tag,
+  send_at: new Date(a.at).toISOString(),
+  title: a.title,
+  body: a.body,
+  sent_at: null,
+})
+
+async function schedule(tag: string, a: Alarm) {
+  if (!active()) return
+  await supabase!.from('scheduled_pushes').upsert(row(tag, a), { onConflict: 'user_id,tag' })
+}
+
+async function cancel(tag: string) {
+  if (!session || !supabase) return
+  await supabase.from('scheduled_pushes').delete().eq('user_id', session.userId).eq('tag', tag).is('sent_at', null)
+}
+
+/** While visible near the end, the in-app beep is enough: drop the push. */
+function armCancel(tag: string, a: Alarm) {
+  window.clearTimeout(cancelTimers.get(tag))
+  const wait = a.at - CANCEL_BEFORE_MS - Date.now()
+  cancelTimers.set(
+    tag,
+    window.setTimeout(() => {
+      if (document.visibilityState === 'visible') void cancel(tag)
+    }, Math.max(0, wait)),
+  )
+}
+
+function onAlarm(tag: string, a: Alarm | null) {
+  window.clearTimeout(cancelTimers.get(tag))
+  if (!a) {
+    void cancel(tag)
+    return
+  }
+  if (a.at - Date.now() <= CANCEL_BEFORE_MS) return // too close to be useful
+  void schedule(tag, a)
+  armCancel(tag, a)
+}
+
+/** Backup: when the app is hidden, (re)send every alarm still ahead. */
 function onHidden() {
-  if (status !== 'on' || !session) return
+  if (!active()) return
   const now = Date.now()
-  const rows = [...alarms.entries()]
-    .filter(([, a]) => a.at > now + 2000)
-    .map(([tag, a]) => ({ user_id: session!.userId, tag, send_at: new Date(a.at).toISOString(), title: a.title, body: a.body, sent_at: null }))
+  const rows = [...alarms.entries()].filter(([, a]) => a.at > now + 2000).map(([tag, a]) => row(tag, a))
   if (!rows.length) return
   void rest('scheduled_pushes?on_conflict=user_id,tag', { method: 'POST', headers: { Prefer: 'resolution=merge-duplicates,return=minimal' }, body: JSON.stringify(rows) })
 }
 
+/** Back in the app: drop what is about to fire, re-arm the rest. */
 function onVisible() {
-  if (!session) return
-  // Back in the app: anything not sent yet is no longer needed.
-  void rest(`scheduled_pushes?user_id=eq.${session.userId}&sent_at=is.null`, { method: 'DELETE' })
+  if (!active()) return
+  const now = Date.now()
+  for (const [tag, a] of alarms) {
+    if (a.at - now <= CANCEL_BEFORE_MS) void cancel(tag)
+    else armCancel(tag, a)
+  }
 }
 
 /** Send a test notification in ~15 s (lock the phone to see it). */
@@ -149,6 +203,7 @@ export function startPush() {
   }
   void supabase.auth.getSession().then(({ data }) => setSession(data.session))
   supabase.auth.onAuthStateChange((_e, s) => setSession(s))
+  onAlarmChange(onAlarm)
   document.addEventListener('visibilitychange', () => (document.visibilityState === 'hidden' ? onHidden() : onVisible()))
   window.addEventListener('pagehide', onHidden)
 }

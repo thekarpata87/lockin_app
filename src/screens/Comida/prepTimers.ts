@@ -1,5 +1,6 @@
 // Sunday step timers: several can run at once (rice + chicken). Timestamp-based, kept per device.
 import { useSyncExternalStore } from 'react'
+import { clearAlarm, setAlarm } from '../../sync/alarms'
 
 export type StepTimer = { endAt: number; totalMs: number }
 type State = { week: string; timers: Record<string, StepTimer>; done: string[] }
@@ -41,9 +42,11 @@ export function usePrep(week: string): State {
   return s.week === week ? s : { week, timers: {}, done: [] }
 }
 
-export function startStepTimer(week: string, stepId: string, minutes: number) {
+export function startStepTimer(week: string, stepId: string, minutes: number, label: string) {
   const s = forWeek(week)
-  write({ ...s, timers: { ...s.timers, [stepId]: { endAt: Date.now() + minutes * 60_000, totalMs: minutes * 60_000 } } })
+  const endAt = Date.now() + minutes * 60_000
+  write({ ...s, timers: { ...s.timers, [stepId]: { endAt, totalMs: minutes * 60_000 } } })
+  setAlarm(`prep:${stepId}`, endAt, 'Temporizador listo', label)
 }
 
 export function stopStepTimer(week: string, stepId: string) {
@@ -51,6 +54,7 @@ export function stopStepTimer(week: string, stepId: string) {
   const timers = { ...s.timers }
   delete timers[stepId]
   write({ ...s, timers })
+  clearAlarm(`prep:${stepId}`)
 }
 
 export function toggleStepDone(week: string, stepId: string) {

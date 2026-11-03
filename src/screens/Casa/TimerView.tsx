@@ -50,15 +50,12 @@ export function TimerView({ run }: { run: Run }) {
   useEffect(() => holdWakeLock(), [])
 
   // Notification if the phone is locked when the session ends.
-  const endsAt = v.paused || v.done ? null : Date.now() + (v.totalMs - v.programMs)
-  const endKey = endsAt === null ? 'none' : Math.round(endsAt / 1000)
+  // End time derived from the state only, so it doesn't drift between renders.
+  const endsAt = v.paused || v.done ? null : run.state.startedAt + run.state.pausedMs + v.totalMs - run.state.skippedMs
   useEffect(() => {
-    if (endsAt === null) {
-      clearAlarm('cardio')
-      return
-    }
-    setAlarm('cardio', endsAt, 'Cardio terminado', `${session.name}: regresa a la app para guardarlo.`)
-  }, [endKey])
+    if (endsAt === null) clearAlarm('cardio')
+    else setAlarm('cardio', endsAt, 'Cardio terminado', `${session.name}: regresa a la app para guardarlo.`)
+  }, [endsAt, session.name])
   useEffect(() => () => clearAlarm('cardio'), [])
 
   // Beeps: 3-2-1 before each change, and on the change. Never replay missed ones after a freeze.
