@@ -105,3 +105,25 @@ describe('protein swap', () => {
     expect(blocksEqual({ P: 0.1 + 0.2 }, { P: 0.3 })).toBe(true)
   })
 })
+
+import { dayFilled, remainingToday } from './blocks'
+
+describe('day totals for HOY', () => {
+  it('sums checked meals and lists what is missing', () => {
+    const meals = { desayuno: { filled: fillMeal('desayuno') }, comida: { filled: fillMeal('comida') } }
+    expect(dayFilled(meals)).toEqual({ V: 2, F: 1, C: 3, P: 9, L: 1, G: 1 })
+    expect(remainingToday(meals)).toEqual([
+      { group: 'V', missing: 2 },
+      { group: 'F', missing: 1 },
+      { group: 'C', missing: 3 },
+      { group: 'P', missing: 7 },
+      { group: 'G', missing: 2 },
+    ])
+  })
+
+  it('nothing missing when every meal is checked; extra cells never count twice', () => {
+    const all = Object.fromEntries((['pre', 'desayuno', 'colacion', 'comida', 'cena'] as const).map((m) => [m, { filled: fillMeal(m) }]))
+    expect(remainingToday(all)).toEqual([])
+    expect(dayFilled({ pre: { filled: { F: 5 } } })).toEqual({ F: 1 })
+  })
+})

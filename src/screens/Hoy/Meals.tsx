@@ -1,7 +1,8 @@
 import { useState } from 'react'
+import { BracketFrame } from '../../components/BracketFrame'
 import { Button } from '../../components/Button'
 import { CheckMark } from '../../components/CheckMark'
-import { MealCard } from '../../components/MealCard'
+import { MiniBlocks } from '../../components/MiniBlocks'
 import { SectionLabel } from '../../components/SectionLabel'
 import { Sheet } from '../../components/Sheet'
 import { foodsInGroup, GROUPS, MEALS, VEG_NOTE } from '../../data/foods'
@@ -12,14 +13,22 @@ import { MEAL_ORDER } from '../../data/types'
 import type { MealKey } from '../../data/types'
 import { setMealFilled, setMealRecipe } from '../../db/repo/dailyLogs'
 import type { DailyLog } from '../../db/schema'
-import { clampFilled, fillMeal, mealGroups, mealProgress, mealTargets, tapCell } from '../../lib/blocks'
+import { clampFilled, fillMeal, mealGroups, mealProgress, recipeBlocks } from '../../lib/blocks'
 import { withSwaps } from '../../lib/plan'
+import { isMealOverdue } from '../../lib/today'
 import { shortTime } from './format'
 import styles from './Hoy.module.css'
 
+// CONTENT §3.1, as written.
+export const PRE_TEXT = '1 manzana, ½ plátano, 2 mandarinas o 1 kiwi'
+
+type Swaps = Record<string, Record<string, string>> | undefined
+
 type Props = {
   date: string
-  swaps: Record<string, Record<string, string>> | undefined
+  time: string
+  currentMeal: MealKey | undefined
+  swaps: Swaps
   log: DailyLog | undefined
   recipeFor: (m: MealKey) => string | null
   plannedFor: (m: MealKey) => string | null
@@ -27,10 +36,17 @@ type Props = {
 
 type Open = { kind: 'recipe' | 'choose' | 'equiv'; meal: MealKey } | null
 
-// CONTENT §3.1, as written.
-const PRE_TEXT = 'Opciones: 1 manzana, ½ plátano, 2 mandarinas o 1 kiwi'
+export const isMealDone = (log: DailyLog | undefined, meal: MealKey) =>
+  mealProgress(meal, clampFilled(meal, log?.meals[meal]?.filled ?? {})).complete
 
-export function Meals({ date, swaps, log, recipeFor, plannedFor }: Props) {
+export const toggleMeal = (date: string, meal: MealKey, done: boolean) => setMealFilled(date, meal, done ? {} : fillMeal(meal))
+
+export function mealSubtitle(meal: MealKey, recipeId: string | null) {
+  if (meal === 'pre') return '1 fruta + creatina'
+  return RECIPE_BY_ID.get(recipeId ?? '')?.name ?? 'Armar con bloques'
+}
+
+export function Meals({ date, time, currentMeal, swaps, log, recipeFor, plannedFor }: Props) {
   const [open, setOpen] = useState<Open>(null)
   const close = () => setOpen(null)
 
@@ -40,29 +56,38 @@ export function Meals({ date, swaps, log, recipeFor, plannedFor }: Props) {
         <SectionLabel>Comidas de hoy</SectionLabel>
       </div>
       {MEAL_ORDER.map((meal) => {
-        const filled = clampFilled(meal, log?.meals[meal]?.filled ?? {})
+        const done = isMealDone(log, meal)
         const recipe = RECIPE_BY_ID.get(recipeFor(meal) ?? '')
-        const isPre = meal === 'pre'
+        const overdue = isMealOverdue(MEAL_TIMES[meal], time, done)
         return (
-          <MealCard
-            key={meal}
-            id={`meal-${meal}`}
-            name={MEALS[meal].name}
-            time={shortTime(MEAL_TIMES[meal])}
-            subtitle={isPre ? PRE_TEXT : recipe ? recipe.name : 'Armar con bloques'}
-            onSubtitle={isPre ? undefined : () => setOpen({ kind: 'choose', meal })}
-            subtitleLabel={`Cambiar receta de ${MEALS[meal].name}`}
-            groups={mealGroups(meal)}
-            targets={mealTargets(meal)}
-            filled={filled}
-            complete={mealProgress(meal, filled).complete}
-            onTap={(g, i) => void setMealFilled(date, meal, tapCell(meal, filled, g, i))}
-            onClear={(g) => void setMealFilled(date, meal, { ...filled, [g]: 0 })}
-            onFill={() => void setMealFilled(date, meal, fillMeal(meal))}
-            onEmpty={() => void setMealFilled(date, meal, {})}
-            onOpen={() => setOpen({ kind: recipe ? 'recipe' : 'equiv', meal })}
-            openLabel={recipe ? `Abrir receta ${recipe.name}` : `Ver equivalentes de ${MEALS[meal].name}`}
-          />
+          <div key={meal} id={`meal-${meal}`} className={`${styles.mealRow} ${done ? styles.mealDone : ''}`}>
+            {meal === currentMeal && !done ? <BracketFrame active inset={4} /> : null}
+            <button
+              type="button"
+              className={styles.mealText}
+              onClick={() => setOpen({ kind: recipe ? 'recipe' : 'equiv', meal })}
+              aria-label={`${MEALS[meal].name}, ${mealSubtitle(meal, recipeFor(meal))}. Ver detalle`}
+            >
+              <span className={styles.mealTime}>{shortTime(MEAL_TIMES[meal])}</span>
+              <span className={styles.mealBody}>
+                <span className={styles.mealName}>
+                  {MEALS[meal].name}
+                  {overdue ? <span className={styles.pending}>Pendiente</span> : null}
+                </span>
+                <span className={styles.mealSub}>{mealSubtitle(meal, recipeFor(meal))}</span>
+              </span>
+            </button>
+            <button
+              type="button"
+              role="checkbox"
+              aria-checked={done}
+              aria-label={`${MEALS[meal].name} hecha`}
+              className={`${styles.box} ${done ? styles.boxOn : ''}`}
+              onClick={() => void toggleMeal(date, meal, done)}
+            >
+              {done ? <CheckMark size={22} /> : null}
+            </button>
+          </div>
         )
       })}
 
@@ -70,7 +95,9 @@ export function Meals({ date, swaps, log, recipeFor, plannedFor }: Props) {
         {open?.kind === 'recipe' ? (
           <RecipeView recipe={swapped(recipeFor(open.meal), swaps)} onChange={() => setOpen({ kind: 'choose', meal: open.meal })} />
         ) : null}
-        {open?.kind === 'equiv' ? <Equivalents meal={open.meal} onChoose={open.meal === 'pre' ? undefined : () => setOpen({ kind: 'choose', meal: open.meal })} /> : null}
+        {open?.kind === 'equiv' ? (
+          <Equivalents meal={open.meal} onChoose={open.meal === 'pre' ? undefined : () => setOpen({ kind: 'choose', meal: open.meal })} />
+        ) : null}
         {open?.kind === 'choose' ? (
           <ChooseRecipe
             meal={open.meal}
@@ -88,7 +115,7 @@ export function Meals({ date, swaps, log, recipeFor, plannedFor }: Props) {
   )
 }
 
-function swapped(id: string | null, swaps: Props['swaps']): Recipe | undefined {
+function swapped(id: string | null, swaps: Swaps): Recipe | undefined {
   const r = RECIPE_BY_ID.get(id ?? '')
   return r ? withSwaps(r, swaps?.[r.id]) : undefined
 }
@@ -103,6 +130,7 @@ function RecipeView({ recipe, onChange }: { recipe: Recipe | undefined; onChange
   if (!recipe) return null
   return (
     <div className={styles.sheetBody}>
+      <MiniBlocks blocks={recipeBlocks(recipe)} />
       <p className={styles.meta}>
         {recipe.minutes} min · {recipe.tags.map((t) => TAG_LABELS[t]).join(' · ')}
         {recipe.fridgeDays ? ` · ${recipe.fridgeDays} días en refri` : ''}
@@ -139,7 +167,7 @@ function RecipeView({ recipe, onChange }: { recipe: Recipe | undefined; onChange
 function Equivalents({ meal, onChoose }: { meal: MealKey; onChoose?: () => void }) {
   return (
     <div className={styles.sheetBody}>
-      <p className={styles.meta}>Elige alimentos de cada grupo hasta completar sus bloques.</p>
+      <p className={styles.meta}>{meal === 'pre' ? `Opciones: ${PRE_TEXT}.` : 'Elige alimentos de cada grupo hasta completar sus bloques.'}</p>
       {mealGroups(meal).map((g) => (
         <div key={g} className={styles.equivGroup}>
           <SectionLabel as="h3">
@@ -181,7 +209,6 @@ function ChooseRecipe({
   onPick: (id: string | null | undefined) => void
 }) {
   if (meal === 'pre') return null
-  const options = recipesForMeal(meal)
   const plannedName = planned ? RECIPE_BY_ID.get(planned)?.name : undefined
   return (
     <div>
@@ -193,7 +220,7 @@ function ChooseRecipe({
           </span>
         </button>
       ) : null}
-      {options.map((r) => (
+      {recipesForMeal(meal).map((r) => (
         <button key={r.id} type="button" className={styles.option} onClick={() => onPick(r.id)} aria-pressed={current === r.id}>
           <span className={styles.optionText}>
             <span>{r.name}</span>

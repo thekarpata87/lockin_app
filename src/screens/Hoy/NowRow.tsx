@@ -1,5 +1,6 @@
 import { useNavigate } from 'react-router'
 import { ArrowCell } from '../../components/ArrowCell'
+import { CheckMark } from '../../components/CheckMark'
 import { SectionLabel } from '../../components/SectionLabel'
 import { CARDIO_BY_ID } from '../../data/cardio'
 import type { DayItem } from '../../lib/now'
@@ -7,9 +8,15 @@ import type { MealKey } from '../../data/types'
 import { shortTime } from './format'
 import styles from './Hoy.module.css'
 
-type Props = { item: DayItem | undefined; mealDetail: (m: MealKey) => string }
+type Props = {
+  item: DayItem | undefined
+  mealDetail: (m: MealKey) => string
+  mealDone: (m: MealKey) => boolean
+  onToggleMeal: (m: MealKey) => void
+}
 
-export function NowRow({ item, mealDetail }: Props) {
+/** What's on now. Meals get the same checkbox as the list; gym and cardio get a shortcut. */
+export function NowRow({ item, mealDetail, mealDone, onToggleMeal }: Props) {
   const navigate = useNavigate()
   if (!item) return null
 
@@ -18,9 +25,6 @@ export function NowRow({ item, mealDetail }: Props) {
   let goLabel = ''
   if (item.meal) {
     detail = mealDetail(item.meal)
-    const meal = item.meal
-    go = () => document.getElementById(`meal-${meal}`)?.scrollIntoView({ behavior: 'smooth', block: 'start' })
-    goLabel = 'Ir a la comida'
   } else if (item.kind === 'gym') {
     go = () => navigate('/gym')
     goLabel = 'Iniciar gym'
@@ -32,6 +36,8 @@ export function NowRow({ item, mealDetail }: Props) {
   }
 
   const label = item.meal ? item.label.replace(/ \(.*\)$/, '') : item.label
+  const meal = item.meal
+  const done = meal ? mealDone(meal) : false
   return (
     <section className={styles.now} aria-label="Ahora">
       <div className={styles.nowText}>
@@ -41,7 +47,20 @@ export function NowRow({ item, mealDetail }: Props) {
         </p>
         {detail ? <p className={styles.nowDetail}>{detail}</p> : null}
       </div>
-      {go ? (
+      {meal ? (
+        <div className={styles.nowCheck}>
+          <button
+            type="button"
+            role="checkbox"
+            aria-checked={done}
+            aria-label={`${label} hecha`}
+            className={`${styles.box} ${styles.boxBig} ${done ? styles.boxOn : ''}`}
+            onClick={() => onToggleMeal(meal)}
+          >
+            {done ? <CheckMark size={26} /> : null}
+          </button>
+        </div>
+      ) : go ? (
         <div className={styles.nowArrow}>
           <ArrowCell label={goLabel} onClick={go} />
         </div>

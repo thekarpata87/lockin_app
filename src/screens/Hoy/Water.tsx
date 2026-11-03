@@ -1,4 +1,3 @@
-import { Button } from '../../components/Button'
 import { SectionLabel } from '../../components/SectionLabel'
 import { WATER } from '../../data/profile'
 import { addWater, setWater } from '../../db/repo/dailyLogs'
@@ -10,10 +9,12 @@ export function Water({ date, ml }: { date: string; ml: number }) {
   return (
     <section className={styles.block} aria-label="Agua">
       <div className={styles.blockHead}>
-        <SectionLabel>Agua</SectionLabel>
-        <span className={styles.figure}>
-          {formatLiters(ml)} / {formatLiters(WATER.goalMl)} L
-        </span>
+        <SectionLabel>
+          Agua · {formatLiters(ml)} / {formatLiters(WATER.goalMl)} L
+        </SectionLabel>
+        <button type="button" className={styles.addWater} onClick={() => void addWater(date, WATER.cellMl)}>
+          +250 ML
+        </button>
       </div>
       <div className={styles.water} role="group" aria-label={`Agua, ${filled} de ${WATER.cells} vasos de 250 ml`}>
         {Array.from({ length: WATER.cells }, (_, i) => (
@@ -28,11 +29,6 @@ export function Water({ date, ml }: { date: string; ml: number }) {
             <span className={`${styles.waterCell} ${i < filled ? styles.waterOn : ''}`} />
           </button>
         ))}
-      </div>
-      <div className={styles.blockActions}>
-        <Button variant="secondary" onClick={() => void addWater(date, WATER.cellMl)}>
-          +250 ml
-        </Button>
       </div>
     </section>
   )

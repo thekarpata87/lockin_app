@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { useLiveQuery } from 'dexie-react-hooks'
 import { ScreenHeader } from '../../components/ScreenHeader'
-import { RECIPE_BY_ID } from '../../data/recipes'
 import type { MealKey } from '../../data/types'
 import { getBodyMetric, latestBodyMetric } from '../../db/repo/bodyMetrics'
 import { getDailyLog, listDailyLogs } from '../../db/repo/dailyLogs'
@@ -14,7 +13,8 @@ import { nowItem, rampStep, scheduleFor } from '../../lib/now'
 import { flexUsedOtherDay, mealRecipeId } from '../../lib/today'
 import { Habits } from './Habits'
 import { HeroStats } from './HeroStats'
-import { Meals } from './Meals'
+import { DayBlocks } from './DayBlocks'
+import { isMealDone, Meals, mealSubtitle, toggleMeal } from './Meals'
 import { NowRow } from './NowRow'
 import { Water } from './Water'
 import styles from './Hoy.module.css'
@@ -45,6 +45,7 @@ export function Hoy() {
   const ramp = rampStep(settings, date)
   const sleepTime = ramp?.sleep ?? settings.sleepTime
   const items = scheduleFor(dayKey, date, settings)
+  const now = nowItem(items, time)
 
   return (
     <>
@@ -58,10 +59,13 @@ export function Hoy() {
         dayComplete={progress.complete}
       />
       <NowRow
-        item={nowItem(items, time)}
-        mealDetail={(m) => (m === 'pre' ? 'Fruta + creatina' : RECIPE_BY_ID.get(recipeFor(m) ?? '')?.name ?? 'Armar con bloques')}
+        item={now}
+        mealDetail={(m) => mealSubtitle(m, recipeFor(m))}
+        mealDone={(m) => isMealDone(log, m)}
+        onToggleMeal={(m) => void toggleMeal(date, m, isMealDone(log, m))}
       />
-      <Meals date={date} swaps={plan?.swaps} log={log} recipeFor={recipeFor} plannedFor={plannedFor} />
+      <DayBlocks meals={log?.meals ?? {}} />
+      <Meals date={date} time={time} currentMeal={now?.meal} swaps={plan?.swaps} log={log} recipeFor={recipeFor} plannedFor={plannedFor} />
       <Water date={date} ml={log?.waterMl ?? 0} />
       <Habits
         date={date}

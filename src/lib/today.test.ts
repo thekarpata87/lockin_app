@@ -49,3 +49,13 @@ describe('habits and water', () => {
     expect(parseDecimal('abc')).toBeUndefined()
   })
 })
+
+import { isMealOverdue } from './today'
+
+describe('isMealOverdue', () => {
+  it('after 45 min and not checked', () => {
+    expect(isMealOverdue('13:30', '14:10', false)).toBe(false)
+    expect(isMealOverdue('13:30', '14:16', false)).toBe(true)
+    expect(isMealOverdue('13:30', '20:00', true)).toBe(false)
+  })
+})

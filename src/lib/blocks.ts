@@ -114,3 +114,15 @@ export function swapItem(item: RecipeItem, toFoodId: string): RecipeItem {
   if (from.group !== to.group) throw new Error(`Cannot swap ${from.id} (${from.group}) for ${to.id} (${to.group})`)
   return { foodId: to.id, ...amountForBlocks(to, itemBlocks(item)) }
 }
+
+/** Blocks filled across the day's meals (each meal clamped to its own targets). */
+export function dayFilled(meals: Partial<Record<MealKey, { filled: Blocks }>>): Blocks {
+  return MEAL_ORDER.reduce<Blocks>((acc, m) => addBlocks(acc, clampFilled(m, meals[m]?.filled ?? {})), {})
+}
+
+/** What is still missing today, per group, in display order. */
+export function remainingToday(meals: Partial<Record<MealKey, { filled: Blocks }>>): { group: Group; missing: number }[] {
+  const target = dayTargets()
+  const filled = dayFilled(meals)
+  return GROUP_ORDER.map((g) => ({ group: g, missing: (target[g] ?? 0) - (filled[g] ?? 0) })).filter((x) => x.missing > 0)
+}

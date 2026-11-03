@@ -50,3 +50,12 @@ export const formatLiters = (ml: number) => {
   const l = ml / 1000
   return Number.isInteger(l) ? String(l) : l.toFixed(2).replace(/0$/, '')
 }
+
+/** Minutes after a meal's time before an unchecked meal shows as "Pendiente". */
+export const MEAL_GRACE_MIN = 45
+
+export function isMealOverdue(mealTime: string, nowHHmm: string, complete: boolean): boolean {
+  if (complete) return false
+  const toMin = (t: string) => Number(t.slice(0, 2)) * 60 + Number(t.slice(3, 5))
+  return toMin(nowHHmm) > toMin(mealTime) + MEAL_GRACE_MIN
+}
