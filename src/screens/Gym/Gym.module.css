@@ -1,0 +1,273 @@
+.sectionHead {
+  background: var(--surface);
+  border-bottom: 1px solid var(--line);
+  padding: var(--s-4) var(--s-4) var(--s-3);
+}
+
+.block {
+  background: var(--surface);
+  border-bottom: 1px solid var(--line);
+  padding: var(--s-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-2);
+}
+
+.note {
+  background: var(--surface);
+  border-bottom: 1px solid var(--line);
+  padding: var(--s-3) var(--s-4);
+  font-size: var(--t-label);
+  line-height: var(--t-label-lh);
+  color: var(--ink-muted);
+}
+
+.muted {
+  font-size: var(--t-label);
+  line-height: var(--t-label-lh);
+  color: var(--ink-muted);
+}
+
+.rules {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: var(--t-label);
+  line-height: var(--t-label-lh);
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-1);
+}
+
+.actions {
+  background: var(--surface);
+  border-bottom: 1px solid var(--line);
+  padding: var(--s-4);
+}
+
+.index {
+  font-size: var(--t-micro);
+  line-height: var(--t-micro-lh);
+  font-weight: 500;
+  color: var(--ink-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---- Exercise list ---- */
+.list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.exRow {
+  position: relative;
+  width: 100%;
+  min-height: var(--row-min);
+  display: grid;
+  grid-template-columns: 44px 1fr 44px;
+  align-items: start;
+  gap: var(--s-2);
+  padding: var(--s-3) var(--s-4);
+  text-align: left;
+  background: var(--surface);
+  border-bottom: 1px solid var(--line);
+}
+
+.exRow .index {
+  padding-top: 4px;
+}
+
+.exText {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.exName {
+  font-size: var(--t-body);
+  line-height: var(--t-body-lh);
+  font-weight: 500;
+}
+
+.exState {
+  justify-self: end;
+  font-size: var(--t-label);
+  color: var(--ink-muted);
+  padding-top: 2px;
+}
+
+.doneMark {
+  color: var(--accent);
+  display: inline-flex;
+}
+
+/* ---- Logger ---- */
+.logger {
+  display: flex;
+  flex-direction: column;
+  background: var(--surface);
+}
+
+.current {
+  position: relative;
+  padding: var(--s-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-1);
+  border-bottom: 1px solid var(--line);
+}
+
+.currentTitle {
+  font-size: var(--t-title);
+  line-height: var(--t-title-lh);
+  font-weight: 500;
+}
+
+.stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  border-bottom: 1px solid var(--line);
+}
+
+.stat {
+  padding: var(--s-3) var(--s-4) var(--s-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-1);
+}
+
+.stat + .stat {
+  border-left: 1px solid var(--line);
+}
+
+.statLabel {
+  font-size: var(--t-micro);
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  color: var(--ink-muted);
+}
+
+.statValue {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: var(--t-number);
+  line-height: var(--t-number-lh);
+  letter-spacing: -0.02em;
+}
+
+.statText {
+  font-size: var(--t-body);
+  line-height: var(--t-body-lh);
+  font-weight: 500;
+}
+
+.saveRow {
+  padding: var(--s-4) var(--s-4) var(--s-3);
+}
+
+/* ---- Rest ---- */
+.rest {
+  padding: 0 var(--s-4) var(--s-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-2);
+}
+
+.restTrack {
+  height: 12px;
+  background: var(--bg);
+  border: 1px solid var(--line);
+  overflow: hidden;
+}
+
+.restFill {
+  height: 100%;
+  background: var(--accent);
+  transform-origin: left;
+  transition: transform 200ms linear;
+}
+
+.restRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.restText {
+  font-size: var(--t-body);
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+}
+
+.restSkip {
+  min-height: 44px;
+  padding: 0 var(--s-2);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  font-size: var(--t-label);
+}
+
+.logged {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid var(--line);
+}
+
+.loggedRow {
+  width: 100%;
+  min-height: 48px;
+  display: grid;
+  grid-template-columns: 32px 1fr 24px;
+  align-items: center;
+  gap: var(--s-2);
+  padding: 0 var(--s-4);
+  border-bottom: 1px solid var(--line);
+  text-align: left;
+  font-size: var(--t-body);
+  font-variant-numeric: tabular-nums;
+}
+
+.loggedText {
+  min-width: 0;
+}
+
+/* ---- Summary ---- */
+.summaryGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1px;
+  background: var(--line);
+  border-bottom: 1px solid var(--line);
+}
+
+.three {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.sumStat {
+  background: var(--surface);
+  padding: var(--s-3) var(--s-4) var(--s-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-1);
+}
+
+.sumValue {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: var(--t-number);
+  line-height: var(--t-number-lh);
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+}
+
+.sheetPad {
+  padding: var(--s-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-3);
+  align-items: stretch;
+}

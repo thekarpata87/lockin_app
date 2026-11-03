@@ -1,0 +1,24 @@
+.seg {
+  display: grid;
+  background: var(--surface);
+  border-bottom: 1px solid var(--line);
+}
+
+.opt {
+  min-height: 48px;
+  font-size: var(--t-label);
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+  transition: background-color var(--dur) var(--ease), color var(--dur) var(--ease);
+}
+
+.opt + .opt {
+  border-left: 1px solid var(--line);
+}
+
+.on {
+  background: var(--inverse);
+  color: var(--on-inverse);
+}
